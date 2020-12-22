@@ -1,4 +1,4 @@
-package com.dianwoyin.price.dto;
+package com.dianwoyin.price.vo.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,23 +16,23 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountUpdateDTO {
+public class AccountUpdateRequestVO {
 
-    @Length(min = 1, max = 64)
+    @Length(min = 1, max = 64, message = "地址格式不正确")
     private String address;
 
-    @NotNull
+    @NotNull(message = "经纬度错误")
     private Double latitude;
 
-    @NotNull
-    private Double longtitude;
+    @NotNull(message = "经纬度错误")
+    private Double longitude;
 
-    @Length(min = 1, max = 64)
+    @Length(min = 1, max = 64, message = "省份信息必填")
     private String province;
 
-    @Length(min = 1, max = 64)
+    @Length(min = 1, max = 64, message = "城市信息必填")
     private String city;
 
-    @Length(min = 1, max = 64)
+    @Length(min = 1, max = 64, message = "地区信息必填")
     private String district;
 }

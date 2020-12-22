@@ -3,7 +3,7 @@ package com.dianwoyin.price.controller;
 import com.dianwoyin.price.api.AccountService;
 import com.dianwoyin.price.vo.response.AccountResponseVO;
 import com.dianwoyin.price.constants.enums.ErrorCodeEnum;
-import com.dianwoyin.price.dto.AccountUpdateDTO;
+import com.dianwoyin.price.vo.request.AccountUpdateRequestVO;
 import com.dianwoyin.price.dto.UserLogin;
 import com.dianwoyin.price.helper.AccountLoginHelper;
 import com.dianwoyin.price.vo.ResponseBaseVO;
@@ -60,8 +60,8 @@ public class AccountController {
 
     @ApiOperation("更新账户信息")
     @PostMapping("/updateAccount")
-    public ResponseBaseVO<Boolean> updateAccountInfo(@Validated AccountUpdateDTO accountUpdateDTO) {
-        return ResponseBaseVO.ok(accountService.updateAccount(accountUpdateDTO));
+    public ResponseBaseVO<Boolean> updateAccountInfo(@Validated AccountUpdateRequestVO accountUpdateRequestVO) {
+        return ResponseBaseVO.ok(accountService.updateAccount(accountUpdateRequestVO));
     }
 
     @ApiOperation("注册账号")

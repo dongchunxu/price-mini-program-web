@@ -1,7 +1,7 @@
 package com.dianwoyin.price.api;
 
 import com.dianwoyin.price.vo.response.AccountResponseVO;
-import com.dianwoyin.price.dto.AccountUpdateDTO;
+import com.dianwoyin.price.vo.request.AccountUpdateRequestVO;
 
 /**
  * @author chunxu.dong
@@ -17,7 +17,7 @@ public interface AccountService {
 
     Boolean logout();
 
-    Boolean updateAccount(AccountUpdateDTO accountUpdateDTO);
+    Boolean updateAccount(AccountUpdateRequestVO accountUpdateRequestVO);
 
     Boolean registerByPhone(String phone, String smsCode);
 

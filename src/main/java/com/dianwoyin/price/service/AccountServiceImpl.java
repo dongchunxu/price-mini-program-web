@@ -8,7 +8,7 @@ import com.dianwoyin.price.vo.response.AccountResponseVO;
 import com.dianwoyin.price.constants.RedisCacheKey;
 import com.dianwoyin.price.constants.enums.AccountStatusEnum;
 import com.dianwoyin.price.constants.enums.ErrorCodeEnum;
-import com.dianwoyin.price.dto.AccountUpdateDTO;
+import com.dianwoyin.price.vo.request.AccountUpdateRequestVO;
 import com.dianwoyin.price.dto.UserLogin;
 import com.dianwoyin.price.dto.WxLoginResponseDTO;
 import com.dianwoyin.price.entity.Account;
@@ -121,8 +121,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean updateAccount(AccountUpdateDTO accountUpdateDTO) {
-        Account updateAccount = BaseBeanUtils.copyProperty(accountUpdateDTO, Account.class);
+    public Boolean updateAccount(AccountUpdateRequestVO accountUpdateRequestVO) {
+        Account updateAccount = BaseBeanUtils.copyProperty(accountUpdateRequestVO, Account.class);
         accountMapper.updateByPrimaryKeySelective(updateAccount);
         return true;
     }
