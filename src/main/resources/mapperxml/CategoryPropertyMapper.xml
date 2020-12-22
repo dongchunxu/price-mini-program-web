@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dianwoyin.price.mapper.CategoryPropertyMapper">
+  <resultMap id="BaseResultMap" type="com.dianwoyin.price.entity.CategoryProperty">
+    <!--@mbg.generated-->
+    <!--@Table category_property-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="property_name" jdbcType="VARCHAR" property="propertyName" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="input_type" jdbcType="INTEGER" property="inputType" />
+    <result column="must" jdbcType="BOOLEAN" property="must" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="deleted" jdbcType="BOOLEAN" property="deleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, property_name, category_id, input_type, must, seq, deleted, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from category_property
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from category_property
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.dianwoyin.price.entity.CategoryProperty" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into category_property (property_name, category_id, input_type, 
+      must, seq, deleted, 
+      create_time, update_time)
+    values (#{propertyName,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER}, #{inputType,jdbcType=INTEGER}, 
+      #{must,jdbcType=BOOLEAN}, #{seq,jdbcType=INTEGER}, #{deleted,jdbcType=BOOLEAN}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.dianwoyin.price.entity.CategoryProperty" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into category_property
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="propertyName != null">
+        property_name,
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+      <if test="inputType != null">
+        input_type,
+      </if>
+      <if test="must != null">
+        must,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="propertyName != null">
+        #{propertyName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="inputType != null">
+        #{inputType,jdbcType=INTEGER},
+      </if>
+      <if test="must != null">
+        #{must,jdbcType=BOOLEAN},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BOOLEAN},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dianwoyin.price.entity.CategoryProperty">
+    <!--@mbg.generated-->
+    update category_property
+    <set>
+      <if test="propertyName != null">
+        property_name = #{propertyName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="inputType != null">
+        input_type = #{inputType,jdbcType=INTEGER},
+      </if>
+      <if test="must != null">
+        must = #{must,jdbcType=BOOLEAN},
+      </if>
+      <if test="seq != null">
+        seq = #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BOOLEAN},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dianwoyin.price.entity.CategoryProperty">
+    <!--@mbg.generated-->
+    update category_property
+    set property_name = #{propertyName,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      input_type = #{inputType,jdbcType=INTEGER},
+      must = #{must,jdbcType=BOOLEAN},
+      seq = #{seq,jdbcType=INTEGER},
+      deleted = #{deleted,jdbcType=BOOLEAN},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
