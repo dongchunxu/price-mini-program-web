@@ -8,7 +8,6 @@ import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.model.PutObjectRequest;
-import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.region.Region;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -52,20 +51,25 @@ public class QcloudFileServiceImpl implements QcloudFileService {
     }
 
     @Override
-    public Boolean upload(MultipartFile multipartFile) throws IOException {
+    public String uploadImg(MultipartFile multipartFile) throws IOException {
         if (multipartFile == null || multipartFile.getOriginalFilename() == null) {
             throw new BusinessException(ErrorCodeEnum.ERROR_COMMON_IMG_UPLOAD);
         }
         File localFile = new File(multipartFile.getOriginalFilename());
         try {
+            String oldName = multipartFile.getOriginalFilename();
+            int idx = oldName.lastIndexOf(".");
+            if (idx == -1) {
+                throw new BusinessException(ErrorCodeEnum.ERROR_COMMON_IMG_UPLOAD);
+            }
+            String newName = oldName.substring(0, idx) + "-" + System.currentTimeMillis() + oldName.substring(idx);
             // 指定要上传的文件
             FileUtils.copyInputStreamToFile(multipartFile.getInputStream(), localFile);
             // 指定要上传到的存储桶
             // 指定要上传到 COS 上对象键
-            String key = multipartFile.getOriginalFilename();
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, localFile);
-            PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
-            return putObjectResult.getDateStr() != null;
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, newName, localFile);
+            cosClient.putObject(putObjectRequest);
+            return newName;
         } catch (Exception e) {
             log.error("upload file error", e);
             throw new BusinessException(ErrorCodeEnum.ERROR_COMMON_IMG_UPLOAD);

@@ -28,7 +28,7 @@ public class CommonController {
     @ApiOperation("上传图片")
     public ResponseBaseVO<Boolean> uploadImg(@RequestParam("file") @NotNull MultipartFile file) {
         try {
-            return ResponseBaseVO.ok(qcloudFileService.upload(file));
+            return ResponseBaseVO.ok(qcloudFileService.uploadImg(file) != null);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

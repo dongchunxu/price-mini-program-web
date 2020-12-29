@@ -15,5 +15,5 @@ public interface QcloudFileService {
      * @param file
      * @return
      */
-    Boolean upload(MultipartFile file) throws IOException;
+    String uploadImg(MultipartFile file) throws IOException;
 }
