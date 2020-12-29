@@ -104,7 +104,7 @@ public class AccountServiceImpl implements AccountService {
         String token = EncryptUtils.md5(account.getUsername());
 
         // 生成缓存
-        redisService.set(String.format(RedisCacheKey.USER_LOGIN_INFO, account.getId()), token);
+        redisService.setObject(String.format(RedisCacheKey.USER_LOGIN_INFO, account.getId()), token);
 
         return true;
     }

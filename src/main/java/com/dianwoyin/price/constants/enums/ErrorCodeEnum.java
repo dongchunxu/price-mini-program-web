@@ -16,7 +16,7 @@ public enum ErrorCodeEnum {
 
     ERROR_COMMON_5XX(50001, "服务器繁忙，请稍后再试~"),
     ERROR_COMMON_PARAM(50002, "请求出错~"),
-
+    ERROR_COMMON_IMG_UPLOAD(50002, "上传图片失败~"),
 
     ERROR_MERCHANT_CREATE(20001, "商户创建失败, 请稍后重试~"),
     ERROR_MERCHANT_UPDATE(20001, "商户更新失败, 请稍后重试~"),

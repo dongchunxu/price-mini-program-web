@@ -72,7 +72,7 @@ public class DistrictServiceImpl implements DistrictService {
                 e.setFirstLetter(pinyin.substring(0, 1).toUpperCase());
                 e.setPinyin(pinyin);
             } catch (BadHanyuPinyinOutputFormatCombination exp) {
-                exp.printStackTrace();
+                log.error("pinyin handle error!", exp);
             }
         });
 
@@ -80,7 +80,7 @@ public class DistrictServiceImpl implements DistrictService {
         pinyinToDistrictMap = districtListRespBOList
                 .stream().sorted(Comparator.comparing(DistrictListResponseVO::getPinyin))
                 .collect(Collectors.groupingBy(DistrictListResponseVO::getFirstLetter));
-        redisService.set(RedisCacheKey.DISTRICT_CITY_ALL, pinyinToDistrictMap);
+        redisService.setObject(RedisCacheKey.DISTRICT_CITY_ALL, pinyinToDistrictMap);
         return pinyinToDistrictMap;
     }
 

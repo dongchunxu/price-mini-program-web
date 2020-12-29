@@ -1,10 +1,13 @@
 package com.dianwoyin.price.service;
 
+import com.alibaba.fastjson.JSON;
 import com.dianwoyin.price.api.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @author chunxu.dong
@@ -14,14 +17,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class RedisServiceImpl implements RedisService {
 
-    @Autowired
+    @Resource(name = "objRedisTemplate")
     private RedisTemplate redisTemplate;
 
-    @Override
-    public void set(String key, Object objVal) {
-        // 默认超时半小时
-        redisTemplate.boundValueOps(key).set(objVal, 100000);
-    }
 
     @Override
     public void delete(String key) {
@@ -35,7 +33,13 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public <T> T getObject(String key, Class<T> clazz) {
-        return (T) redisTemplate.boundValueOps(key).get();
+        return (T) redisTemplate.opsForValue().get(key);
+    }
+
+    @Override
+    public void setObject(String key, Object objVal) {
+        // 默认超时半小时
+        redisTemplate.opsForValue().set(key, objVal);
     }
 
     @Override

@@ -6,7 +6,7 @@ package com.dianwoyin.price.api;
  */
 public interface RedisService {
 
-    void set(String key, Object objVal);
+    void setObject(String key, Object objVal);
 
     void delete(String key);
 
