@@ -5,5 +5,5 @@ package com.dianwoyin.price.api;
  * @date 2020/12/14
  */
 public interface SmsCodeService {
-    void sendLoginVerifySms(String phone);
+    void sendLoginVerifySmsCode(String phone);
 }

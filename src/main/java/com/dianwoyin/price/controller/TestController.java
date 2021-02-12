@@ -1,6 +1,7 @@
 package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.api.DistrictService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
  * @date 2020/12/13
  */
 @RestController
+@Api(tags = "测试（忽略）")
 public class TestController {
 
     @Autowired

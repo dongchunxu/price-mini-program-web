@@ -1,6 +1,6 @@
 package com.dianwoyin.price.api;
 
-import com.dianwoyin.price.vo.response.CategoryListResponseVO;
+import com.dianwoyin.price.vo.response.CategoryListResponse;
 
 import java.util.List;
 
@@ -14,6 +14,6 @@ public interface CategoryService {
      * 获取所有的类目树
      * @return
      */
-    List<CategoryListResponseVO> getAllCategoryList();
+    List<CategoryListResponse> getAllCategoryList();
 
 }

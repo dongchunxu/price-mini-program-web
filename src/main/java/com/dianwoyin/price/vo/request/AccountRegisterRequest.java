@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 @Data
 @Builder
-public class AccountRegisterRequestVO {
+public class AccountRegisterRequest {
     @Length(min = 11, max = 11, message = "手机号必须为11位")
     @ApiModelProperty("手机号码")
     private String phone;

@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MerchantUpdateRequestVO {
+public class MerchantUpdateRequest {
 
     @ApiModelProperty("id")
     @NotNull

@@ -19,8 +19,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel("类目返回对象")
-public class CategoryResponseVO implements Serializable {
+public class CategoryResponse implements Serializable {
 
     @ApiModelProperty("类目属性定义信息集合")
-    private List<CategoryPropResponseVO> categoryPropResponseVOList;
+    private List<PropResponse> propResponseList;
 }

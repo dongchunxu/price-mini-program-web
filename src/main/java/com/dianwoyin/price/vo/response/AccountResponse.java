@@ -18,7 +18,7 @@ import java.util.Date;
 @ApiModel("账户返回对象")
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountResponseVO implements Serializable {
+public class AccountResponse implements Serializable {
     /**
      * 用户名
      */

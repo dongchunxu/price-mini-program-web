@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountUpdateRequestVO {
+public class AccountUpdateRequest {
 
     @Length(min = 1, max = 64, message = "地址格式不正确")
     private String address;

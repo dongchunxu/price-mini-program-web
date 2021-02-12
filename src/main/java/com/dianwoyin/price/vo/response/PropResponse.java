@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel("属性返回对象")
-public class CategoryPropResponseVO implements Serializable {
+public class PropResponse implements Serializable {
     @ApiModelProperty("属性id")
     private Integer id;
 
@@ -39,5 +39,5 @@ public class CategoryPropResponseVO implements Serializable {
     private Integer seq;
 
     @ApiModelProperty("属性值集合")
-    private List<CategoryPropValueResponseVO> propertyValueResponseBOS;
+    private List<PropValueResponse> propertyValueResponseList;
 }

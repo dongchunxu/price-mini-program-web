@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("商户创建请求对象")
-public class MerchantCreateRequestVO {
+public class MerchantCreateRequest {
 
     @ApiModelProperty("商户名")
     @NotNull(message = "商户名不能为空")

@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("类目定义信息")
-public class CategoryListResponseVO implements Serializable {
+public class CategoryListResponse implements Serializable {
     @ApiModelProperty("类目id")
     private Integer id;
 
@@ -42,5 +42,5 @@ public class CategoryListResponseVO implements Serializable {
     private Integer seq;
 
     @ApiModelProperty("子类目定义信息集合")
-    private List<CategoryListResponseVO> children;
+    private List<CategoryListResponse> children;
 }

@@ -2,7 +2,7 @@ package com.dianwoyin.price.advice;
 
 import com.dianwoyin.price.BusinessException;
 import com.dianwoyin.price.constants.enums.ErrorCodeEnum;
-import com.dianwoyin.price.vo.ResponseBaseVO;
+import com.dianwoyin.price.vo.BizBaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -21,12 +21,12 @@ public class GlobalExceptionHandler {
     /**-------- 通用异常处理方法 --------**/
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public ResponseBaseVO<Void> error(Exception e) {
+    public BizBaseResponse<Void> error(Exception e) {
         log.error("GlobalExceptionHandler.error", e);
         // 业务异常
         if (e instanceof BusinessException) {
             BusinessException be = (BusinessException) e;
-            return ResponseBaseVO.fail(be.getCode(), be.getMessage());
+            return BizBaseResponse.fail(be.getCode(), be.getMessage());
         }
         // 参数验证
         else if (e instanceof BindException) {
@@ -36,9 +36,9 @@ public class GlobalExceptionHandler {
                 msg = fieldErro.getDefaultMessage();
                 break;
             }
-            return ResponseBaseVO.fail(ErrorCodeEnum.ERROR_COMMON_PARAM.setMessage(msg));
+            return BizBaseResponse.fail(ErrorCodeEnum.ERROR_COMMON_PARAM.setMessage(msg));
         }
         // 通用异常兜底
-        return ResponseBaseVO.fail(ErrorCodeEnum.ERROR_COMMON_5XX);
+        return BizBaseResponse.fail(ErrorCodeEnum.ERROR_COMMON_5XX);
     }
 }

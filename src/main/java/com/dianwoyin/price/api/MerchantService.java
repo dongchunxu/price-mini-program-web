@@ -1,7 +1,7 @@
 package com.dianwoyin.price.api;
 
-import com.dianwoyin.price.vo.request.MerchantCreateRequestVO;
-import com.dianwoyin.price.vo.request.MerchantUpdateRequestVO;
+import com.dianwoyin.price.vo.request.MerchantCreateRequest;
+import com.dianwoyin.price.vo.request.MerchantUpdateRequest;
 
 /**
  * @author chunxu.dong
@@ -11,16 +11,16 @@ public interface MerchantService {
 
     /**
      * 创建商户
-     * @param merchantCreateRequestVO
+     * @param merchantCreateRequest
      * @return
      */
-    Boolean create(MerchantCreateRequestVO merchantCreateRequestVO);
+    Boolean create(MerchantCreateRequest merchantCreateRequest);
 
     /**
      * 更新商户信息
-     * @param merchantUpdateRequestVO
+     * @param merchantUpdateRequest
      * @return
      */
-    Boolean update(MerchantUpdateRequestVO merchantUpdateRequestVO);
+    Boolean update(MerchantUpdateRequest merchantUpdateRequest);
 
 }

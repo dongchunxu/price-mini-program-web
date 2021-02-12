@@ -18,7 +18,7 @@ public class SmsCodeServiceImpl implements SmsCodeService {
     private RedisService redisService;
 
     @Override
-    public void sendLoginVerifySms(String phone) {
+    public void sendLoginVerifySmsCode(String phone) {
         String fake = "1234";
 //        redisService.set(String.format(RedisCacheKey.SMS_CODE, phone), fake);
     }

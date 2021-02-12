@@ -20,6 +20,8 @@ public enum ErrorCodeEnum {
 
     ERROR_MERCHANT_CREATE(20001, "商户创建失败, 请稍后重试~"),
     ERROR_MERCHANT_UPDATE(20001, "商户更新失败, 请稍后重试~"),
+
+    ERROR_ASK_PRICE_CREATE(50002, "上传图片失败~"),
     ;
 
     private Integer code;

@@ -5,11 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dianwoyin.price.api.DistrictService;
 import com.dianwoyin.price.api.RedisService;
-import com.dianwoyin.price.vo.response.DistrictListResponseVO;
+import com.dianwoyin.price.vo.response.DistrictListResponse;
 import com.dianwoyin.price.constants.RedisCacheKey;
 import com.dianwoyin.price.entity.DistrictDict;
 import com.dianwoyin.price.mapper.DistrictDictMapper;
-import com.dianwoyin.price.utils.BaseBeanUtils;
+import com.dianwoyin.price.utils.PriceBeanUtils;
 import com.dianwoyin.price.utils.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -46,24 +46,24 @@ public class DistrictServiceImpl implements DistrictService {
     }
 
     @Override
-    public List<DistrictListResponseVO> getChildrenByParentId(Integer parentId) {
+    public List<DistrictListResponse> getChildrenByParentId(Integer parentId) {
         if (parentId == null || parentId < 1) {
             return Collections.emptyList();
         }
         List<DistrictDict> districtDicts = districtDictMapper.selectByParentId(parentId);
-        return BaseBeanUtils.copyProperty(districtDicts, DistrictListResponseVO.class);
+        return PriceBeanUtils.copyProperty(districtDicts, DistrictListResponse.class);
     }
 
     @Override
-    public Map<String, List<DistrictListResponseVO>> getDistrictByLevel(Integer level) {
-        Map<String, List<DistrictListResponseVO>> pinyinToDistrictMap = redisService.getObject(RedisCacheKey.DISTRICT_CITY_ALL, Map.class);
+    public Map<String, List<DistrictListResponse>> getDistrictByLevel(Integer level) {
+        Map<String, List<DistrictListResponse>> pinyinToDistrictMap = redisService.getObject(RedisCacheKey.DISTRICT_CITY_ALL, Map.class);
         if (!CollectionUtils.isEmpty(pinyinToDistrictMap)) {
             return pinyinToDistrictMap;
         }
 
         // 获取该级所有的行政区划
         List<DistrictDict> districtDictList = districtDictMapper.selectByLevel(level);
-        List<DistrictListResponseVO> districtListRespBOList = BaseBeanUtils.copyProperty(districtDictList, DistrictListResponseVO.class);
+        List<DistrictListResponse> districtListRespBOList = PriceBeanUtils.copyProperty(districtDictList, DistrictListResponse.class);
 
         // 所有的行政区获取拼音，用于下面排序
         districtListRespBOList.forEach(e-> {
@@ -78,8 +78,8 @@ public class DistrictServiceImpl implements DistrictService {
 
         // 以拼音排序
         pinyinToDistrictMap = districtListRespBOList
-                .stream().sorted(Comparator.comparing(DistrictListResponseVO::getPinyin))
-                .collect(Collectors.groupingBy(DistrictListResponseVO::getFirstLetter));
+                .stream().sorted(Comparator.comparing(DistrictListResponse::getPinyin))
+                .collect(Collectors.groupingBy(DistrictListResponse::getFirstLetter));
         redisService.setObject(RedisCacheKey.DISTRICT_CITY_ALL, pinyinToDistrictMap);
         return pinyinToDistrictMap;
     }

@@ -77,5 +77,4 @@ public class QcloudFileServiceImpl implements QcloudFileService {
           try { localFile.delete(); } catch (Exception ignored){}
         }
     }
-
 }

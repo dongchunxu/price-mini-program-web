@@ -1,7 +1,8 @@
 package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.api.QcloudFileService;
-import com.dianwoyin.price.vo.ResponseBaseVO;
+import com.dianwoyin.price.vo.BizBaseResponse;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("/api/common")
+@Api(tags = "通用接口")
 public class CommonController {
 
     @Autowired
@@ -26,9 +28,9 @@ public class CommonController {
 
     @PostMapping("/uploadImg")
     @ApiOperation("上传图片")
-    public ResponseBaseVO<Boolean> uploadImg(@RequestParam("file") @NotNull MultipartFile file) {
+    public BizBaseResponse<Boolean> uploadImg(@RequestParam("file") @NotNull MultipartFile file) {
         try {
-            return ResponseBaseVO.ok(qcloudFileService.uploadImg(file) != null);
+            return BizBaseResponse.ok(qcloudFileService.uploadImg(file) != null);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

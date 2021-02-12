@@ -16,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel("属性值返回对象")
-public class CategoryPropValueResponseVO implements Serializable {
+public class PropValueResponse implements Serializable {
     @ApiModelProperty("属性值id")
     private Integer id;
 

@@ -1,6 +1,6 @@
 package com.dianwoyin.price.utils;
 
-import com.dianwoyin.price.vo.response.CategoryListResponseVO;
+import com.dianwoyin.price.vo.response.CategoryListResponse;
 import com.dianwoyin.price.entity.CategoryDict;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
@@ -15,13 +15,13 @@ import java.util.stream.Collectors;
  */
 public class ConvertUtils {
 
-    public static List<CategoryListResponseVO> convert(List<CategoryDict> sourceList) {
+    public static List<CategoryListResponse> convert(List<CategoryDict> sourceList) {
         if (CollectionUtils.isEmpty(sourceList)) {
             return Collections.emptyList();
         }
 
         return sourceList.stream().map(e->{
-            CategoryListResponseVO target = new CategoryListResponseVO();
+            CategoryListResponse target = new CategoryListResponse();
             BeanUtils.copyProperties(e, target);
             return target;
         }).collect(Collectors.toList());

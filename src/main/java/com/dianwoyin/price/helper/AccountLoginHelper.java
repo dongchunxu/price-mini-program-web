@@ -8,7 +8,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import static com.dianwoyin.price.constants.RedisCacheKey.USER_LOGIN_INFO;
+import static com.dianwoyin.price.constants.RedisCacheKey.USER_LOGIN;
 
 /**
  * @author chunxu.dong
@@ -21,7 +21,7 @@ public class AccountLoginHelper {
 
         HttpServletRequest request = attributes.getRequest();
         HttpSession session = request.getSession();
-        return (UserLogin) session.getAttribute(USER_LOGIN_INFO);
+        return (UserLogin) session.getAttribute(USER_LOGIN);
     }
 
     public static void setLogin(UserLogin userLogin) {
@@ -29,7 +29,7 @@ public class AccountLoginHelper {
 
         HttpServletRequest request = attributes.getRequest();
         HttpSession session = request.getSession();
-        session.setAttribute(USER_LOGIN_INFO, userLogin);
+        session.setAttribute(USER_LOGIN, userLogin);
     }
 
     public static String getLoginIp() {

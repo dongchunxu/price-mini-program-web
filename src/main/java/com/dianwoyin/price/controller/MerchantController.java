@@ -1,9 +1,10 @@
 package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.api.MerchantService;
-import com.dianwoyin.price.vo.request.MerchantCreateRequestVO;
-import com.dianwoyin.price.vo.ResponseBaseVO;
-import com.dianwoyin.price.vo.request.MerchantUpdateRequestVO;
+import com.dianwoyin.price.vo.request.MerchantCreateRequest;
+import com.dianwoyin.price.vo.BizBaseResponse;
+import com.dianwoyin.price.vo.request.MerchantUpdateRequest;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/api/merchant")
+@Api(tags = "商户")
 public class MerchantController {
 
     @Autowired
@@ -26,13 +28,13 @@ public class MerchantController {
 
     @PostMapping("/create")
     @ApiOperation("创建商户")
-    public ResponseBaseVO<Boolean> create(@Valid MerchantCreateRequestVO merchantCreateRequestVO) {
-        return ResponseBaseVO.ok(merchantService.create(merchantCreateRequestVO));
+    public BizBaseResponse<Boolean> create(@Valid MerchantCreateRequest merchantCreateRequest) {
+        return BizBaseResponse.ok(merchantService.create(merchantCreateRequest));
     }
 
     @PostMapping("/update")
     @ApiOperation("更新商户")
-    public ResponseBaseVO<Boolean> update(@Valid MerchantUpdateRequestVO merchantUpdateRequestVO) {
-        return ResponseBaseVO.ok(merchantService.update(merchantUpdateRequestVO));
+    public BizBaseResponse<Boolean> update(@Valid MerchantUpdateRequest merchantUpdateRequest) {
+        return BizBaseResponse.ok(merchantService.update(merchantUpdateRequest));
     }
 }

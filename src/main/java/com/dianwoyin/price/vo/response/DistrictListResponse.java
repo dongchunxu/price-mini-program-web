@@ -19,7 +19,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel("城市信息")
-public class DistrictListResponseVO implements Serializable {
+public class DistrictListResponse implements Serializable {
 
     @ApiModelProperty("城市id")
     private Integer id;

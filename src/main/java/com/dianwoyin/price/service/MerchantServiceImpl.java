@@ -4,11 +4,11 @@ import com.dianwoyin.price.BusinessException;
 import com.dianwoyin.price.api.MerchantService;
 import com.dianwoyin.price.constants.enums.ErrorCodeEnum;
 import com.dianwoyin.price.constants.enums.MerchantStatusEnum;
-import com.dianwoyin.price.vo.request.MerchantCreateRequestVO;
-import com.dianwoyin.price.vo.request.MerchantUpdateRequestVO;
+import com.dianwoyin.price.vo.request.MerchantCreateRequest;
+import com.dianwoyin.price.vo.request.MerchantUpdateRequest;
 import com.dianwoyin.price.entity.Merchant;
 import com.dianwoyin.price.mapper.MerchantMapper;
-import com.dianwoyin.price.utils.BaseBeanUtils;
+import com.dianwoyin.price.utils.PriceBeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,12 +27,12 @@ public class MerchantServiceImpl implements MerchantService {
     private MerchantMapper merchantMapper;
 
     @Override
-    public Boolean create(MerchantCreateRequestVO merchantCreateRequestVO) {
+    public Boolean create(MerchantCreateRequest merchantCreateRequest) {
 
         try {
             Date now = new Date();
 
-            Merchant merchant = BaseBeanUtils.copyProperty(merchantCreateRequestVO, Merchant.class);
+            Merchant merchant = PriceBeanUtils.copyProperty(merchantCreateRequest, Merchant.class);
             merchant.setCreateTime(now);
             merchant.setUpdateTime(now);
             merchant.setDeleted(false);
@@ -49,9 +49,9 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public Boolean update(MerchantUpdateRequestVO updateRequestVO) {
+    public Boolean update(MerchantUpdateRequest updateRequestVO) {
         try {
-            Merchant merchant = BaseBeanUtils.copyProperty(updateRequestVO, Merchant.class);
+            Merchant merchant = PriceBeanUtils.copyProperty(updateRequestVO, Merchant.class);
             merchantMapper.updateByPrimaryKeySelective(merchant);
         } catch (Exception e) {
             log.error("update merchant error", e);

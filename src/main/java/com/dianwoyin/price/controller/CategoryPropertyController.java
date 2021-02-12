@@ -1,8 +1,8 @@
 package com.dianwoyin.price.controller;
 
-import com.dianwoyin.price.vo.ResponseBaseVO;
-import com.dianwoyin.price.vo.response.CategoryListResponseVO;
-import com.dianwoyin.price.vo.response.CategoryPropResponseVO;
+import com.dianwoyin.price.vo.BizBaseResponse;
+import com.dianwoyin.price.vo.response.PropResponse;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +17,12 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/property")
+@Api(tags = "品类属性")
 public class CategoryPropertyController {
 
     @ApiOperation("获取属性和属性值")
     @GetMapping("/getCategoryPropPropValue")
-    public ResponseBaseVO<Map<Integer, List<CategoryPropResponseVO>>> getCategoryPropPropValue(Integer categoryId) {
-        return ResponseBaseVO.ok(null);
+    public BizBaseResponse<Map<Integer, List<PropResponse>>> getCategoryPropPropValue(Integer categoryId) {
+        return BizBaseResponse.ok(null);
     }
 }

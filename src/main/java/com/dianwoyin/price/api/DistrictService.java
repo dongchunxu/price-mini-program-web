@@ -1,6 +1,6 @@
 package com.dianwoyin.price.api;
 
-import com.dianwoyin.price.vo.response.DistrictListResponseVO;
+import com.dianwoyin.price.vo.response.DistrictListResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -12,8 +12,8 @@ import java.util.Map;
 public interface DistrictService {
     void init();
 
-    List<DistrictListResponseVO> getChildrenByParentId(Integer id);
+    List<DistrictListResponse> getChildrenByParentId(Integer id);
 
 
-    Map<String, List<DistrictListResponseVO>> getDistrictByLevel(Integer level);
+    Map<String, List<DistrictListResponse>> getDistrictByLevel(Integer level);
 }

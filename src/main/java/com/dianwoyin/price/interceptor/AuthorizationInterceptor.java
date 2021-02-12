@@ -25,6 +25,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         }
         HttpSession session = request.getSession();
 
-        return session.getAttribute(RedisCacheKey.USER_LOGIN_INFO) != null;
+        return session.getAttribute(RedisCacheKey.USER_LOGIN) != null;
     }
 }

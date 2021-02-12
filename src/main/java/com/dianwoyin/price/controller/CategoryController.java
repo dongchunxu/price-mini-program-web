@@ -1,8 +1,9 @@
 package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.api.CategoryService;
-import com.dianwoyin.price.vo.response.CategoryListResponseVO;
-import com.dianwoyin.price.vo.ResponseBaseVO;
+import com.dianwoyin.price.vo.response.CategoryListResponse;
+import com.dianwoyin.price.vo.BizBaseResponse;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/category")
+@Api(tags = "品类")
 public class CategoryController {
 
     @Autowired
@@ -24,7 +26,7 @@ public class CategoryController {
 
     @ApiOperation("获取所有分类")
     @GetMapping("/getAllCategoryList")
-    public ResponseBaseVO<List<CategoryListResponseVO>> getAllCategoryList() {
-        return ResponseBaseVO.ok(categoryService.getAllCategoryList());
+    public BizBaseResponse<List<CategoryListResponse>> getAllCategoryList() {
+        return BizBaseResponse.ok(categoryService.getAllCategoryList());
     }
 }

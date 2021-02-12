@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @ApiModel("通用返回封装对象")
-public class ResponseBaseVO<T> {
+public class BizBaseResponse<T> {
 
     @ApiModelProperty("错误码, 非0直接展示下面的msg")
     private Integer code;
@@ -29,16 +29,16 @@ public class ResponseBaseVO<T> {
     private T data;
 
 
-    public static <T> ResponseBaseVO<T> ok(T data) {
-        return new ResponseBaseVO<>(0, "success", data);
+    public static <T> BizBaseResponse<T> ok(T data) {
+        return new BizBaseResponse<>(0, "success", data);
     }
 
-    public static <T> ResponseBaseVO<T> fail(ErrorCodeEnum codeEnum) {
-        return new ResponseBaseVO<T>(codeEnum.getCode(), codeEnum.getMessage(), null);
+    public static <T> BizBaseResponse<T> fail(ErrorCodeEnum codeEnum) {
+        return new BizBaseResponse<T>(codeEnum.getCode(), codeEnum.getMessage(), null);
     }
 
-    public static <T> ResponseBaseVO<T> fail(Integer code, String msg) {
-        return new ResponseBaseVO<T>(code, msg, null);
+    public static <T> BizBaseResponse<T> fail(Integer code, String msg) {
+        return new BizBaseResponse<T>(code, msg, null);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.dianwoyin.price.api;
 
-import com.dianwoyin.price.vo.response.AccountResponseVO;
-import com.dianwoyin.price.vo.request.AccountUpdateRequestVO;
+import com.dianwoyin.price.vo.response.AccountResponse;
+import com.dianwoyin.price.vo.request.AccountUpdateRequest;
 
 /**
  * @author chunxu.dong
@@ -9,7 +9,7 @@ import com.dianwoyin.price.vo.request.AccountUpdateRequestVO;
  */
 public interface AccountService {
 
-    Boolean loginUnionByWx(String wxCode);
+    Boolean loginByWxUnion(String wxCode);
 
     Boolean loginByPhone(String phone, String smsCode);
 
@@ -17,11 +17,11 @@ public interface AccountService {
 
     Boolean logout();
 
-    Boolean updateAccount(AccountUpdateRequestVO accountUpdateRequestVO);
+    Boolean updateAccount(AccountUpdateRequest accountUpdateRequest);
 
     Boolean registerByPhone(String phone, String smsCode);
 
-    AccountResponseVO getAccountByPhone(String phone);
+    AccountResponse getAccountByPhone(String phone);
 
     Boolean getLoginSmsCode(String phone);
 }

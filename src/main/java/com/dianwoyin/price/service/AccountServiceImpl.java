@@ -4,17 +4,17 @@ import com.alibaba.fastjson.JSON;
 import com.dianwoyin.price.BusinessException;
 import com.dianwoyin.price.api.AccountService;
 import com.dianwoyin.price.api.RedisService;
-import com.dianwoyin.price.vo.response.AccountResponseVO;
+import com.dianwoyin.price.vo.response.AccountResponse;
 import com.dianwoyin.price.constants.RedisCacheKey;
 import com.dianwoyin.price.constants.enums.AccountStatusEnum;
 import com.dianwoyin.price.constants.enums.ErrorCodeEnum;
-import com.dianwoyin.price.vo.request.AccountUpdateRequestVO;
+import com.dianwoyin.price.vo.request.AccountUpdateRequest;
 import com.dianwoyin.price.dto.UserLogin;
 import com.dianwoyin.price.dto.WxLoginResponseDTO;
 import com.dianwoyin.price.entity.Account;
 import com.dianwoyin.price.mapper.AccountMapper;
 import com.dianwoyin.price.helper.AccountLoginHelper;
-import com.dianwoyin.price.utils.BaseBeanUtils;
+import com.dianwoyin.price.utils.PriceBeanUtils;
 import com.dianwoyin.price.utils.EncryptUtils;
 import com.dianwoyin.price.utils.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +45,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public Boolean loginUnionByWx(String wxCode) {
+    public Boolean loginByWxUnion(String wxCode) {
         try {
             WxLoginResponseDTO wxLoginResponseDTO = JSON.parseObject(HttpClientUtils.doGet(wx_url), WxLoginResponseDTO.class);
 
@@ -59,7 +59,7 @@ public class AccountServiceImpl implements AccountService {
                 account = quickRegister(wxLoginResponseDTO.getOpenId());
             }
 
-            AccountResponseVO accountRespBO = BaseBeanUtils.copyProperty(account, AccountResponseVO.class);
+            AccountResponse accountRespBO = PriceBeanUtils.copyProperty(account, AccountResponse.class);
 
             return true;
         } catch (Exception e) {
@@ -104,7 +104,7 @@ public class AccountServiceImpl implements AccountService {
         String token = EncryptUtils.md5(account.getUsername());
 
         // 生成缓存
-        redisService.setObject(String.format(RedisCacheKey.USER_LOGIN_INFO, account.getId()), token);
+        redisService.setObject(String.format(RedisCacheKey.USER_LOGIN, account.getId()), token);
 
         return true;
     }
@@ -121,8 +121,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean updateAccount(AccountUpdateRequestVO accountUpdateRequestVO) {
-        Account updateAccount = BaseBeanUtils.copyProperty(accountUpdateRequestVO, Account.class);
+    public Boolean updateAccount(AccountUpdateRequest accountUpdateRequest) {
+        Account updateAccount = PriceBeanUtils.copyProperty(accountUpdateRequest, Account.class);
         accountMapper.updateByPrimaryKeySelective(updateAccount);
         return true;
     }
@@ -162,12 +162,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountResponseVO getAccountByPhone(String phone) {
+    public AccountResponse getAccountByPhone(String phone) {
         Account account = accountMapper.selectByPhone(phone);
         if (account == null) {
             throw new BusinessException(USER_NOT_EXIST);
         }
-        return BaseBeanUtils.copyProperty(account, AccountResponseVO.class);
+        return PriceBeanUtils.copyProperty(account, AccountResponse.class);
     }
 
     @Override
@@ -177,6 +177,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private void quickLogin(Account newAccount) {
-        AccountLoginHelper.setLogin(BaseBeanUtils.copyProperty(newAccount, UserLogin.class));
+        AccountLoginHelper.setLogin(PriceBeanUtils.copyProperty(newAccount, UserLogin.class));
     }
 }

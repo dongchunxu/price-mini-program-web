@@ -1,7 +1,9 @@
 package com.dianwoyin.price.service;
 
 import com.dianwoyin.price.api.CategoryService;
-import com.dianwoyin.price.vo.response.CategoryListResponseVO;
+import com.dianwoyin.price.api.RedisService;
+import com.dianwoyin.price.constants.RedisCacheKey;
+import com.dianwoyin.price.vo.response.CategoryListResponse;
 import com.dianwoyin.price.entity.CategoryDict;
 import com.dianwoyin.price.mapper.CategoryDictMapper;
 import com.dianwoyin.price.utils.ConvertUtils;
@@ -24,31 +26,36 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryDictMapper categoryDictMapper;
+    @Autowired
+    private RedisService redisService;
 
     @Override
-    public List<CategoryListResponseVO> getAllCategoryList() {
+    public List<CategoryListResponse> getAllCategoryList() {
+        List<CategoryListResponse> ret = redisService.getObject(RedisCacheKey.CATEGORY_ALL, List.class);
+        if (!CollectionUtils.isEmpty(ret)) {
+            return ret;
+        }
         // 获取全量的类目信息
         List<CategoryDict> categoryDictList = categoryDictMapper.selectList();
 
-        List<CategoryListResponseVO> categoryDictResponseList = ConvertUtils.convert(categoryDictList);
+        List<CategoryListResponse> categoryDictResponseList = ConvertUtils.convert(categoryDictList);
         if (CollectionUtils.isEmpty(categoryDictResponseList)) {
             return Collections.emptyList();
         }
 
         // 获取一级类目
-        List<CategoryListResponseVO> rootCategoryResponseList
-                = categoryDictResponseList.stream().filter(e->e.getParentId().equals(0)).collect(Collectors.toList());
-        rootCategoryResponseList.forEach(e->findChild(categoryDictResponseList, e));
-
-        return rootCategoryResponseList;
+        ret = categoryDictResponseList.stream().filter(e->e.getParentId().equals(0)).collect(Collectors.toList());
+        ret.forEach(e->findChild(categoryDictResponseList, e));
+        redisService.setObject(RedisCacheKey.CATEGORY_ALL, ret);
+        return ret;
     }
 
 
-    private void findChild(List<CategoryListResponseVO> allCategory, CategoryListResponseVO curr) {
+    private void findChild(List<CategoryListResponse> allCategory, CategoryListResponse curr) {
         if (CollectionUtils.isEmpty(allCategory)) {
             return;
         }
-        List<CategoryListResponseVO> childrenList = allCategory.stream()
+        List<CategoryListResponse> childrenList = allCategory.stream()
                 .filter(e -> e.getParentId().equals(curr.getId())).collect(Collectors.toList());
         curr.setChildren(childrenList);
         childrenList.forEach(e-> findChild(allCategory, e));

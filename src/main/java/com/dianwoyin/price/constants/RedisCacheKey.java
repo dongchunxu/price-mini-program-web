@@ -5,7 +5,10 @@ package com.dianwoyin.price.constants;
  * @date 2020/12/14
  */
 public class RedisCacheKey {
-    public static final String USER_LOGIN_INFO = "user_login";
+    public static final String USER_LOGIN = "user_login";
     public static final String LOGIN_SMS_CODE = "login_sms_code";
     public static final String DISTRICT_CITY_ALL = "district_city_all";
+    public static final String CATEGORY_ALL = "category_all";
+    public static final String CATEGORY_PROPERTY_VALUE = "category_all";
+    
 }
