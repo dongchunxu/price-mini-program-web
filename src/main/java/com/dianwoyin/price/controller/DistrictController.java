@@ -29,6 +29,6 @@ public class DistrictController {
     @ApiOperation("获取所有的城市")
     @GetMapping("/getAllCity")
     public BizBaseResponse<Map<String, List<DistrictListResponse>>> getAllCity() {
-        return BizBaseResponse.ok(districtService.getDistrictByLevel(DistrictLevelEnum.CITY.getLevel()));
+        return BizBaseResponse.ok(districtService.getDistrictByLevel(DistrictLevelEnum.City.getLevel()));
     }
 }

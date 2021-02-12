@@ -5,7 +5,9 @@ package com.dianwoyin.price.constants.enums;
  * @date 2020/12/21
  */
 public enum AccountStatusEnum {
-    NORMAL(0, "正常"),
+    NoReview(0, "未审核"),
+    Reviewed(1, "已审核"),
+    Forbidden(2, "已禁止"),
     ;
 
     private Integer code;

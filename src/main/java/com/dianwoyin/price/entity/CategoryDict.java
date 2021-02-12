@@ -28,11 +28,6 @@ public class CategoryDict {
     private String categoryName;
 
     /**
-     * 类目code
-     */
-    private String categoryCode;
-
-    /**
      * 父类目id
      */
     private Integer parentId;

@@ -37,7 +37,7 @@ public class MerchantServiceImpl implements MerchantService {
             merchant.setUpdateTime(now);
             merchant.setDeleted(false);
             // 初始状态为待审核
-            merchant.setStatus(MerchantStatusEnum.AUDITING.getCode());
+            merchant.setStatus(MerchantStatusEnum.Auditing.getCode());
 
             merchantMapper.insert(merchant);
         } catch (Exception e) {

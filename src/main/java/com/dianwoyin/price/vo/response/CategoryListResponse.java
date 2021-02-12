@@ -26,9 +26,6 @@ public class CategoryListResponse implements Serializable {
     @ApiModelProperty("类目名")
     private String categoryName;
 
-    @ApiModelProperty("类目code")
-    private String categoryCode;
-
     @ApiModelProperty("父类目id")
     private Integer parentId;
 

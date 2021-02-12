@@ -5,11 +5,11 @@ package com.dianwoyin.price.constants.enums;
  * @date 2020/12/14
  */
 public enum DistrictLevelEnum {
-    COUNTRY(1),
-    PROVINCE(2),
-    CITY(3),
-    DISTRICT(4),
-    STREET(5)
+    Country(1),
+    Province(2),
+    City(3),
+    District(4),
+    Street(5)
     ;
 
     private int level;

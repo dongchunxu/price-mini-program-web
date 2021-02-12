@@ -6,7 +6,6 @@
     <!--@Table category_dict-->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
-    <result column="category_code" jdbcType="VARCHAR" property="categoryCode" />
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
     <result column="leaf" jdbcType="BOOLEAN" property="leaf" />
@@ -17,7 +16,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, category_name, category_code, parent_id, img_url, leaf, seq, deleted, create_time, 
+    id, category_name, parent_id, img_url, leaf, seq, deleted, create_time,
     update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -34,11 +33,11 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.dianwoyin.price.entity.CategoryDict" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into category_dict (category_name, category_code, parent_id, 
+    insert into category_dict (category_name, parent_id,
       img_url, leaf, seq, 
       deleted, create_time, update_time
       )
-    values (#{categoryName,jdbcType=VARCHAR}, #{categoryCode,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, 
+    values (#{categoryName,jdbcType=VARCHAR},  #{parentId,jdbcType=INTEGER},
       #{imgUrl,jdbcType=VARCHAR}, #{leaf,jdbcType=BOOLEAN}, #{seq,jdbcType=INTEGER}, 
       #{deleted,jdbcType=BOOLEAN}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
@@ -49,9 +48,6 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="categoryName != null">
         category_name,
-      </if>
-      <if test="categoryCode != null">
-        category_code,
       </if>
       <if test="parentId != null">
         parent_id,
@@ -78,9 +74,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="categoryName != null">
         #{categoryName,jdbcType=VARCHAR},
-      </if>
-      <if test="categoryCode != null">
-        #{categoryCode,jdbcType=VARCHAR},
       </if>
       <if test="parentId != null">
         #{parentId,jdbcType=INTEGER},
@@ -112,9 +105,6 @@
       <if test="categoryName != null">
         category_name = #{categoryName,jdbcType=VARCHAR},
       </if>
-      <if test="categoryCode != null">
-        category_code = #{categoryCode,jdbcType=VARCHAR},
-      </if>
       <if test="parentId != null">
         parent_id = #{parentId,jdbcType=INTEGER},
       </if>
@@ -143,7 +133,6 @@
     <!--@mbg.generated-->
     update category_dict
     set category_name = #{categoryName,jdbcType=VARCHAR},
-      category_code = #{categoryCode,jdbcType=VARCHAR},
       parent_id = #{parentId,jdbcType=INTEGER},
       img_url = #{imgUrl,jdbcType=VARCHAR},
       leaf = #{leaf,jdbcType=BOOLEAN},

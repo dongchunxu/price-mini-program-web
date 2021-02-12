@@ -142,7 +142,7 @@ public class AccountServiceImpl implements AccountService {
                 .username("")
                 .password(EncryptUtils.md5(smsCode))
                 .phone(phone)
-                .status(AccountStatusEnum.NORMAL.getCode())
+                .status(AccountStatusEnum.NoReview.getCode())
                 .firstName("")
                 .lastName("")
                 .sex(0)

@@ -6,10 +6,10 @@ package com.dianwoyin.price.constants.enums;
  */
 public enum MerchantStatusEnum {
 
-    AUDITING(0, "审核中"),
-    OPEN(1, "营业中"),
-    CLOSED(2, "关门"),
-    FORBIDDEN(3, "已被禁止"),
+    Auditing(0, "审核中"),
+    Open(1, "营业中"),
+    Closed(2, "关门"),
+    Forbidden(3, "已被禁止"),
     ;
 
     private int code;
