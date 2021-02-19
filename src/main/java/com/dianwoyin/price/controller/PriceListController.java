@@ -2,7 +2,9 @@ package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.api.PriceListService;
 import com.dianwoyin.price.vo.BizBaseResponse;
+import com.dianwoyin.price.vo.request.PriceListConfirmPriceRequest;
 import com.dianwoyin.price.vo.request.PriceListCreateRequest;
+import com.dianwoyin.price.vo.response.PriceListListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +31,17 @@ public class PriceListController {
     @PostMapping("/create")
     public BizBaseResponse<Boolean> createPriceList(@Valid @RequestBody PriceListCreateRequest request) {
         return BizBaseResponse.ok(priceListService.createPriceList(request));
+    }
+
+    @ApiOperation("报价单列表")
+    @PostMapping("/get-price-list-list")
+    public BizBaseResponse<PriceListListResponse> getPriceListList() {
+        return BizBaseResponse.ok(null);
+    }
+
+    @ApiOperation("采纳报价")
+    @PostMapping("/confirm-price")
+    public BizBaseResponse<Boolean> confirmPrice(@Valid @RequestBody PriceListConfirmPriceRequest confirmRequest) {
+        return BizBaseResponse.ok(null);
     }
 }

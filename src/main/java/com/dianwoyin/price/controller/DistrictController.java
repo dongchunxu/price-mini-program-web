@@ -1,9 +1,9 @@
 package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.api.DistrictService;
-import com.dianwoyin.price.vo.response.DistrictListResponse;
 import com.dianwoyin.price.constants.enums.DistrictEnum;
 import com.dianwoyin.price.vo.BizBaseResponse;
+import com.dianwoyin.price.vo.response.DistrictListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class DistrictController {
     private DistrictService districtService;
 
     @ApiOperation("获取所有的城市")
-    @GetMapping("/getAllCity")
+    @GetMapping("/get-all-city")
     public BizBaseResponse<Map<String, List<DistrictListResponse>>> getAllCity() {
         return BizBaseResponse.ok(districtService.getDistrictByLevel(DistrictEnum.City.getCode()));
     }

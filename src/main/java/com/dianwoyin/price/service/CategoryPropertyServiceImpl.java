@@ -2,15 +2,14 @@ package com.dianwoyin.price.service;
 
 import com.dianwoyin.price.api.CategoryPropertyService;
 import com.dianwoyin.price.api.RedisService;
-import com.dianwoyin.price.constants.RedisCacheKey;
-import com.dianwoyin.price.vo.response.PropResponse;
-import com.dianwoyin.price.vo.response.PropValueResponse;
-import com.dianwoyin.price.vo.response.CategoryPropResponse;
 import com.dianwoyin.price.entity.CategoryProperty;
 import com.dianwoyin.price.entity.CategoryPropertyValue;
 import com.dianwoyin.price.mapper.CategoryPropertyMapper;
 import com.dianwoyin.price.mapper.CategoryPropertyValueMapper;
 import com.dianwoyin.price.utils.PriceBeanUtils;
+import com.dianwoyin.price.vo.response.CategoryPropResponse;
+import com.dianwoyin.price.vo.response.PropResponse;
+import com.dianwoyin.price.vo.response.PropValueResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

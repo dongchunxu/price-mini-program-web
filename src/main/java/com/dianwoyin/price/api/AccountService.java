@@ -1,7 +1,8 @@
 package com.dianwoyin.price.api;
 
-import com.dianwoyin.price.vo.response.AccountResponse;
 import com.dianwoyin.price.vo.request.AccountUpdateRequest;
+import com.dianwoyin.price.vo.response.AccountResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author chunxu.dong
@@ -24,4 +25,6 @@ public interface AccountService {
     AccountResponse getAccountByPhone(String phone);
 
     Boolean getLoginSmsCode(String phone);
+
+    String uploadAvatar(MultipartFile file);
 }

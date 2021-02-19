@@ -1,6 +1,5 @@
 package com.dianwoyin.price.api;
 
-import com.dianwoyin.price.vo.request.AskPriceRequest;
 import com.dianwoyin.price.vo.request.PriceListCreateRequest;
 
 /**

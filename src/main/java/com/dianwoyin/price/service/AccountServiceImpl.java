@@ -3,26 +3,29 @@ package com.dianwoyin.price.service;
 import com.alibaba.fastjson.JSON;
 import com.dianwoyin.price.BusinessException;
 import com.dianwoyin.price.api.AccountService;
+import com.dianwoyin.price.api.QcloudFileService;
 import com.dianwoyin.price.api.RedisService;
-import com.dianwoyin.price.vo.response.AccountResponse;
 import com.dianwoyin.price.constants.RedisCacheKey;
 import com.dianwoyin.price.constants.enums.AccountStatusEnum;
 import com.dianwoyin.price.constants.enums.ErrorCodeEnum;
-import com.dianwoyin.price.vo.request.AccountUpdateRequest;
 import com.dianwoyin.price.dto.UserLogin;
 import com.dianwoyin.price.dto.WxLoginResponseDTO;
 import com.dianwoyin.price.entity.Account;
-import com.dianwoyin.price.mapper.AccountMapper;
 import com.dianwoyin.price.helper.AccountLoginHelper;
-import com.dianwoyin.price.utils.PriceBeanUtils;
+import com.dianwoyin.price.mapper.AccountMapper;
 import com.dianwoyin.price.utils.EncryptUtils;
 import com.dianwoyin.price.utils.HttpClientUtils;
+import com.dianwoyin.price.utils.PriceBeanUtils;
+import com.dianwoyin.price.vo.request.AccountUpdateRequest;
+import com.dianwoyin.price.vo.response.AccountResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Objects;
 
@@ -42,6 +45,8 @@ public class AccountServiceImpl implements AccountService {
     private RedisService redisService;
     @Autowired
     private AccountMapper accountMapper;
+    @Autowired
+    private QcloudFileService qcloudFileService;
 
 
     @Override
@@ -174,6 +179,16 @@ public class AccountServiceImpl implements AccountService {
     public Boolean getLoginSmsCode(String phone) {
         AccountLoginHelper.sendLoginSmsCode();
         return true;
+    }
+
+    @Override
+    public String uploadAvatar(MultipartFile file) {
+        try {
+            return qcloudFileService.uploadImg(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BusinessException(ERROR_COMMON_IMG_UPLOAD);
+        }
     }
 
     private void quickLogin(Account newAccount) {

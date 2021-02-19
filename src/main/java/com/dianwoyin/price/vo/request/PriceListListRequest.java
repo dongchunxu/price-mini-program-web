@@ -10,6 +10,6 @@ import java.util.Map;
  * @date 2021/2/19
  */
 @Data
-public class PriceListCreateRequest implements Serializable {
-    private Map<Integer, String> propValueMap;
+public class PriceListListRequest implements Serializable {
+    private Integer type;
 }

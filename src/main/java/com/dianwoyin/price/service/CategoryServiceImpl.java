@@ -2,11 +2,10 @@ package com.dianwoyin.price.service;
 
 import com.dianwoyin.price.api.CategoryService;
 import com.dianwoyin.price.api.RedisService;
-import com.dianwoyin.price.constants.RedisCacheKey;
-import com.dianwoyin.price.vo.response.CategoryListResponse;
 import com.dianwoyin.price.entity.CategoryDict;
 import com.dianwoyin.price.mapper.CategoryDictMapper;
 import com.dianwoyin.price.utils.ConvertUtils;
+import com.dianwoyin.price.vo.response.CategoryListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
