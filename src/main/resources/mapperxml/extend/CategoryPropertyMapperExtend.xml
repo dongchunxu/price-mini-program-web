@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dianwoyin.price.mapper.CategoryPropertyMapper">
+
+    <select id="selectByCategoryId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from category_property
+        where category_id = #{categoryId} and deleted = 0
+        order by seq desc
+    </select>
 </mapper>

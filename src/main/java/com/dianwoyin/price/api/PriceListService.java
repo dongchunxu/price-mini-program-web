@@ -1,6 +1,7 @@
 package com.dianwoyin.price.api;
 
 import com.dianwoyin.price.vo.request.AskPriceRequest;
+import com.dianwoyin.price.vo.request.PriceListCreateRequest;
 
 /**
  * @author chunxu.dong
@@ -8,5 +9,5 @@ import com.dianwoyin.price.vo.request.AskPriceRequest;
  */
 public interface PriceListService {
 
-    Boolean createAskPrice(AskPriceRequest askPriceRequest);
+    Boolean createPriceList(PriceListCreateRequest request);
 }

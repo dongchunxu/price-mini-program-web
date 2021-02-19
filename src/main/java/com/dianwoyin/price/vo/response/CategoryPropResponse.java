@@ -19,8 +19,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel("类目返回对象")
-public class CategoryResponse implements Serializable {
+public class CategoryPropResponse implements Serializable {
 
-    @ApiModelProperty("类目属性定义信息集合")
-    private List<PropResponse> propResponseList;
+    @ApiModelProperty("必填属性集合")
+    private List<PropResponse> mustProps;
+
+    @ApiModelProperty("可选属性集合")
+    private List<PropResponse> optionalProps;
 }

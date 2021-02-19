@@ -2,7 +2,7 @@ package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.api.DistrictService;
 import com.dianwoyin.price.vo.response.DistrictListResponse;
-import com.dianwoyin.price.constants.enums.DistrictLevelEnum;
+import com.dianwoyin.price.constants.enums.DistrictEnum;
 import com.dianwoyin.price.vo.BizBaseResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,6 +29,6 @@ public class DistrictController {
     @ApiOperation("获取所有的城市")
     @GetMapping("/getAllCity")
     public BizBaseResponse<Map<String, List<DistrictListResponse>>> getAllCity() {
-        return BizBaseResponse.ok(districtService.getDistrictByLevel(DistrictLevelEnum.City.getLevel()));
+        return BizBaseResponse.ok(districtService.getDistrictByLevel(DistrictEnum.City.getCode()));
     }
 }
