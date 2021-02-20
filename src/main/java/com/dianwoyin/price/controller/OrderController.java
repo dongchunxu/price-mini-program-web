@@ -1,14 +1,12 @@
 package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.vo.BizBaseResponse;
-import com.dianwoyin.price.vo.request.OrderListRequest;
+import com.dianwoyin.price.vo.response.OrderDetailResponse;
 import com.dianwoyin.price.vo.response.OrderListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author chunxu.dong
@@ -21,21 +19,26 @@ public class OrderController {
 
     @ApiOperation("确认收货")
     @PostMapping("/confirm-receipt/{orderId}")
-    public BizBaseResponse<Boolean> confirmReceipt(@PathVariable Integer orderId) {
+    public BizBaseResponse<Boolean> confirmReceipt(@ApiParam("订单id") @PathVariable Integer orderId) {
         return BizBaseResponse.ok(true);
     }
 
     @ApiOperation("删除订单")
     @PostMapping("/delete/{orderId}")
-    public BizBaseResponse<Boolean> delete(@PathVariable Integer orderId) {
+    public BizBaseResponse<Boolean> delete(@ApiParam("订单id") @PathVariable Integer orderId) {
         return BizBaseResponse.ok(true);
     }
 
-    @ApiOperation("删除订单")
-    @PostMapping("/get-order-list")
-    public BizBaseResponse<OrderListResponse> orderList(OrderListRequest request) {
+    @ApiOperation("获取订单列表")
+    @GetMapping("/get-order-list")
+    public BizBaseResponse<OrderListResponse> orderList(@ApiParam("订单状态") @RequestParam(value = "订单状态", required = false) Integer orderStatus) {
         return BizBaseResponse.ok(null);
     }
 
+    @ApiOperation("获取订单详情")
+    @GetMapping("/get-order-detail/{orderId}")
+    public BizBaseResponse<OrderDetailResponse> orderDetail(@ApiParam("订单id") @PathVariable Integer orderId) {
+        return BizBaseResponse.ok(null);
+    }
 
 }

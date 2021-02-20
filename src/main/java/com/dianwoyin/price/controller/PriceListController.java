@@ -4,14 +4,13 @@ import com.dianwoyin.price.api.PriceListService;
 import com.dianwoyin.price.vo.BizBaseResponse;
 import com.dianwoyin.price.vo.request.PriceListConfirmPriceRequest;
 import com.dianwoyin.price.vo.request.PriceListCreateRequest;
+import com.dianwoyin.price.vo.response.PriceListDetailResponse;
 import com.dianwoyin.price.vo.response.PriceListListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -34,14 +33,20 @@ public class PriceListController {
     }
 
     @ApiOperation("报价单列表")
-    @PostMapping("/get-price-list-list")
-    public BizBaseResponse<PriceListListResponse> getPriceListList() {
+    @GetMapping("/get-price-list-list")
+    public BizBaseResponse<PriceListListResponse> getPriceListList(@ApiParam("报价单状态") @RequestParam(required = false) Integer priceListStatus) {
         return BizBaseResponse.ok(null);
     }
 
     @ApiOperation("采纳报价")
     @PostMapping("/confirm-price")
     public BizBaseResponse<Boolean> confirmPrice(@Valid @RequestBody PriceListConfirmPriceRequest confirmRequest) {
+        return BizBaseResponse.ok(null);
+    }
+
+    @ApiOperation("报价单详情")
+    @GetMapping("/get-price-list-detail/{priceListId}")
+    public BizBaseResponse<PriceListDetailResponse> getPriceListDetail(@ApiParam("报价单id") Integer priceListId) {
         return BizBaseResponse.ok(null);
     }
 }

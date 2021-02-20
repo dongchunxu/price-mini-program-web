@@ -1,6 +1,6 @@
 package com.dianwoyin.price.api;
 
-import com.dianwoyin.price.vo.response.CategoryPropResponse;
+import com.dianwoyin.price.vo.response.CategoryPropListResponse;
 
 /**
  * @author chunxu.dong
@@ -13,7 +13,7 @@ public interface CategoryPropertyService {
      * @param categoryId
      * @return
      */
-    CategoryPropResponse getPropertyListByCategoryId(Integer categoryId);
+    CategoryPropListResponse getPropertyListByCategoryId(Integer categoryId);
 
 
 }

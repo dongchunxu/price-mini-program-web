@@ -4,7 +4,7 @@ import com.dianwoyin.price.api.CategoryPropertyService;
 import com.dianwoyin.price.api.CategoryService;
 import com.dianwoyin.price.vo.BizBaseResponse;
 import com.dianwoyin.price.vo.response.CategoryListResponse;
-import com.dianwoyin.price.vo.response.CategoryPropResponse;
+import com.dianwoyin.price.vo.response.CategoryPropListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -22,13 +22,19 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
-@Api(tags = "通用接口")
+@Api(tags = "字典接口")
 public class CommonController {
 
     @Autowired
     private CategoryService categoryService;
     @Autowired
     private CategoryPropertyService categoryPropertyService;
+
+    @ApiOperation("搜索分类")
+    @GetMapping("/category/search")
+    public BizBaseResponse<List<CategoryListResponse>> search(@ApiParam("关键词") String keyword) {
+        return BizBaseResponse.ok(null);
+    }
 
     @ApiOperation("获取所有分类")
     @GetMapping("/category/get-all-category-list")
@@ -38,9 +44,8 @@ public class CommonController {
 
     @ApiOperation("获取属性和属性值")
     @GetMapping("/prop/get-prop-value-by-category-id/{categoryId}")
-    public BizBaseResponse<CategoryPropResponse> getCategoryPropPropValueByCategoryId(@ApiParam("类目id") @PathVariable Integer categoryId) {
-        CategoryPropResponse categoryPropResponse = categoryPropertyService.getPropertyListByCategoryId(categoryId);
-        return BizBaseResponse.ok(categoryPropResponse);
+    public BizBaseResponse<CategoryPropListResponse> getCategoryPropPropValueByCategoryId(@ApiParam("类目id") @PathVariable Integer categoryId) {
+        return BizBaseResponse.ok(categoryPropertyService.getPropertyListByCategoryId(categoryId));
     }
 
 }

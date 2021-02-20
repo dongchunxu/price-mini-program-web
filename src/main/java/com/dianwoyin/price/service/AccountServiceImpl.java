@@ -186,7 +186,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             return qcloudFileService.uploadImg(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("uploadAvatar error", e);
             throw new BusinessException(ERROR_COMMON_IMG_UPLOAD);
         }
     }

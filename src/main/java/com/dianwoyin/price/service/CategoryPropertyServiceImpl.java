@@ -7,9 +7,8 @@ import com.dianwoyin.price.entity.CategoryPropertyValue;
 import com.dianwoyin.price.mapper.CategoryPropertyMapper;
 import com.dianwoyin.price.mapper.CategoryPropertyValueMapper;
 import com.dianwoyin.price.utils.PriceBeanUtils;
-import com.dianwoyin.price.vo.response.CategoryPropResponse;
-import com.dianwoyin.price.vo.response.PropResponse;
-import com.dianwoyin.price.vo.response.PropValueResponse;
+import com.dianwoyin.price.vo.response.CategoryPropListResponse;
+import com.dianwoyin.price.vo.response.CategoryPropValueResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class CategoryPropertyServiceImpl implements CategoryPropertyService {
     private RedisService redisService;
 
     @Override
-    public CategoryPropResponse getPropertyListByCategoryId(Integer categoryId) {
+    public CategoryPropListResponse getPropertyListByCategoryId(Integer categoryId) {
 //        String key = RedisCacheKey.CATEGORY_PROPERTY_VALUE + "_" + categoryId;
 //        CategoryPropResponse retObj = redisService.getObject(key, CategoryPropResponse.class);
 //        if (retObj != null) {
@@ -44,21 +43,21 @@ public class CategoryPropertyServiceImpl implements CategoryPropertyService {
 
         // 查询类目下的所有属性
         List<CategoryProperty> categoryProps = categoryPropertyMapper.selectByCategoryId(categoryId);
-        List<PropResponse> propResponses = PriceBeanUtils.copyProperty(categoryProps, PropResponse.class);
-        if (CollectionUtils.isEmpty(propResponses)) {
+        List<CategoryPropListResponse.CategoryPropListItem> categoryPropRespons = PriceBeanUtils.copyProperty(categoryProps, CategoryPropListResponse.CategoryPropListItem.class);
+        if (CollectionUtils.isEmpty(categoryPropRespons)) {
             return null;
         }
 
         // 查询属性下的所有属性值
-        List<Integer> propIds = propResponses.stream().map(PropResponse::getId).collect(Collectors.toList());
+        List<Integer> propIds = categoryPropRespons.stream().map(CategoryPropListResponse.CategoryPropListItem::getId).collect(Collectors.toList());
         List<CategoryPropertyValue> propValues = categoryPropertyValueMapper.selectByPropertyIds(propIds);
-        List<PropValueResponse> propValueResponses = PriceBeanUtils.copyProperty(propValues, PropValueResponse.class);
+        List<CategoryPropValueResponse> categoryPropValueRespons = PriceBeanUtils.copyProperty(propValues, CategoryPropValueResponse.class);
 
         // 按propId分组
-        Map<Integer, List<PropValueResponse>> propIdToPropValueMap = propValueResponses.stream().collect(Collectors.groupingBy(PropValueResponse::getPropertyId));
-        propResponses.forEach(e-> e.setPropValues(propIdToPropValueMap.get(e.getId())));
+        Map<Integer, List<CategoryPropValueResponse>> propIdToPropValueMap = categoryPropValueRespons.stream().collect(Collectors.groupingBy(CategoryPropValueResponse::getPropertyId));
+        categoryPropRespons.forEach(e-> e.setPropValues(propIdToPropValueMap.get(e.getId())));
 
 //        redisService.setObject(key, retObj);
-        return CategoryPropResponse.builder().mustProps(propResponses).build();
+        return CategoryPropListResponse.builder().mustProps(categoryPropRespons).build();
     }
 }

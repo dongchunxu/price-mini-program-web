@@ -3,7 +3,6 @@ package com.dianwoyin.price.vo.request;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * @author chunxu.dong
