@@ -46,7 +46,7 @@ public class PriceListController {
 
     @ApiOperation("报价单详情")
     @GetMapping("/get-price-list-detail/{priceListId}")
-    public BizBaseResponse<PriceListDetailResponse> getPriceListDetail(@ApiParam("报价单id") Integer priceListId) {
+    public BizBaseResponse<PriceListDetailResponse> getPriceListDetail(@ApiParam("报价单id") @PathVariable Integer priceListId) {
         return BizBaseResponse.ok(null);
     }
 }

@@ -21,9 +21,9 @@ import java.util.List;
  * @date 2020/12/22
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/category")
 @Api(tags = "字典接口")
-public class CommonController {
+public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
@@ -37,13 +37,13 @@ public class CommonController {
     }
 
     @ApiOperation("获取所有分类")
-    @GetMapping("/category/get-all-category-list")
+    @GetMapping("/get-all-category-list")
     public BizBaseResponse<List<CategoryListResponse>> getAllCategoryList() {
         return BizBaseResponse.ok(categoryService.getAllCategoryList());
     }
 
     @ApiOperation("获取属性和属性值")
-    @GetMapping("/prop/get-prop-value-by-category-id/{categoryId}")
+    @GetMapping("/get-prop-value-by-category-id/{categoryId}")
     public BizBaseResponse<CategoryPropListResponse> getCategoryPropPropValueByCategoryId(@ApiParam("类目id") @PathVariable Integer categoryId) {
         return BizBaseResponse.ok(categoryPropertyService.getPropertyListByCategoryId(categoryId));
     }
