@@ -23,6 +23,7 @@ import java.util.List;
 @ApiModel("报检单列表")
 public class PriceListListResponse implements Serializable {
 
+    @ApiModelProperty("报价单items")
     private List<PriceListListItem> priceListItems;
 
     @Data

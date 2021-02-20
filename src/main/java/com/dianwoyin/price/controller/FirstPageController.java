@@ -19,7 +19,7 @@ public class FirstPageController {
 
     @ApiOperation("获取所有分类")
     @GetMapping("/get-first-page")
-    public BizBaseResponse<FirstPageResponse> getAllCategoryList() {
+    public BizBaseResponse<FirstPageResponse> getFirstPage() {
         return null;
     }
 

@@ -26,34 +26,41 @@ public class FirstPageResponse implements Serializable {
     @ApiModelProperty("热门活动items")
     private List<HotActivityItem> hotActivityItems;
 
+    @ApiModelProperty("活动tabs")
+    private List<ActivityTab> activityTabs;
+
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @ApiModel("活动tab配置")
+    public static class ActivityTab implements Serializable {
+        @ApiModelProperty("类目id")
+        private String categoryId;
+        @ApiModelProperty("类目名称")
+        private Integer categoryName;
+
+    }
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @ApiModel("热门活动item")
     public static class HotActivityItem implements Serializable {
-
         @ApiModelProperty("头图")
         private String headImgUrl;
-
         @ApiModelProperty("活动名称")
         private String activityName;
-
         @ApiModelProperty("活动价格")
         private String activityPrice;
-
         @ApiModelProperty("供应商名称")
         private String supplierName;
-
         @ApiModelProperty("截止时间")
         private Date activityEndTime;
-
         @ApiModelProperty("供应商头像url")
         private String supplierAvatar;
-
         @ApiModelProperty("类目id")
         private Integer categoryId;
-
     }
 
     @Data
@@ -63,10 +70,8 @@ public class FirstPageResponse implements Serializable {
     public static class HotHitItem implements Serializable {
         @ApiModelProperty("id")
         private Integer id;
-
         @ApiModelProperty("名称")
         private String name;
-
         @ApiModelProperty("类型，1：类目（当前只支持）")
         private Integer type;
     }

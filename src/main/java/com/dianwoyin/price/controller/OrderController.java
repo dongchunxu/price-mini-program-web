@@ -1,6 +1,7 @@
 package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.vo.BizBaseResponse;
+import com.dianwoyin.price.vo.request.OrderCreateRequest;
 import com.dianwoyin.price.vo.response.OrderDetailResponse;
 import com.dianwoyin.price.vo.response.OrderListResponse;
 import io.swagger.annotations.Api;
@@ -40,5 +41,12 @@ public class OrderController {
     public BizBaseResponse<OrderDetailResponse> orderDetail(@ApiParam("订单id") @PathVariable Integer orderId) {
         return BizBaseResponse.ok(null);
     }
+
+    @ApiOperation("创建订单")
+    @PostMapping("/create")
+    public BizBaseResponse<Boolean> create(@RequestBody OrderCreateRequest createRequest) {
+        return BizBaseResponse.ok(true);
+    }
+
 
 }
