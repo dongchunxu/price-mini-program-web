@@ -19,7 +19,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("订单列表")
+@ApiModel("订单详情")
 public class OrderDetailResponse implements Serializable {
 
     @ApiModelProperty("订单id")
@@ -37,8 +37,8 @@ public class OrderDetailResponse implements Serializable {
     @ApiModelProperty("支付时间")
     private Date payTime;
 
-    @ApiModelProperty("支付方式")
-    private String payChannel;
+    @ApiModelProperty("支付方式, 1: 微信支付")
+    private Integer payChannel;
 
     @ApiModelProperty("商品名称")
     private String goodsName;

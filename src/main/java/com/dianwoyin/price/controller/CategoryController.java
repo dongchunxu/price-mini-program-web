@@ -22,7 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/category")
-@Api(tags = "字典接口")
+@Api(tags = "品类服务")
 public class CategoryController {
 
     @Autowired

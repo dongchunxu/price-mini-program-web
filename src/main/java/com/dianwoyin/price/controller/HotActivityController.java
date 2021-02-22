@@ -25,5 +25,4 @@ public class HotActivityController {
         return BizBaseResponse.ok(null);
     }
 
-
 }

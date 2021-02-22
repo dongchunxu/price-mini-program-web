@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("报价单列表item")
+@ApiModel("报价单详情")
 public class PriceListDetailResponse implements Serializable {
 
     private Integer id;

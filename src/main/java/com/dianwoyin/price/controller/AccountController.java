@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
  */
 @RequestMapping("/api/account")
 @RestController
-@Api(tags = "账户注册登录")
+@Api(tags = "账户服务")
 public class AccountController {
     @Autowired
     private AccountService accountService;
