@@ -32,7 +32,7 @@ public class OrderController {
 
     @ApiOperation("获取订单列表")
     @GetMapping("/get-order-list")
-    public BizBaseResponse<OrderListResponse> orderList(@ApiParam("订单状态") @RequestParam(value = "订单状态", required = false) Integer orderStatus) {
+    public BizBaseResponse<OrderListResponse> orderList(@ApiParam("订单状态") @RequestParam(required = false) Integer orderStatus) {
         return BizBaseResponse.ok(null);
     }
 

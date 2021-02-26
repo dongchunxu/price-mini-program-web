@@ -43,6 +43,9 @@ public class OrderDetailResponse implements Serializable {
     @ApiModelProperty("商品名称")
     private String goodsName;
 
+    @ApiModelProperty("商品图片")
+    private String goodsImgUrl;
+
     @ApiModelProperty("商品数量")
     private Integer goodsQty;
 

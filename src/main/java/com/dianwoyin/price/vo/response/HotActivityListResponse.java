@@ -29,8 +29,8 @@ public class HotActivityListResponse {
     @AllArgsConstructor
     @ApiModel("热门活动列表item")
     public static class HotActivityListItem {
-        @ApiModelProperty("头图")
-        private String headImgUrl;
+        @ApiModelProperty("活动图片")
+        private String activityImgUrl;
 
         @ApiModelProperty("活动名称")
         private String activityName;

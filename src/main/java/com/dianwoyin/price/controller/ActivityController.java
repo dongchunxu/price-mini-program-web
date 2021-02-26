@@ -1,6 +1,7 @@
 package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.vo.BizBaseResponse;
+import com.dianwoyin.price.vo.response.ActivityDetailResponse;
 import com.dianwoyin.price.vo.response.HotActivityListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,14 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2021/2/20
  */
 @RestController
-@RequestMapping("/api/hot-activity")
+@RequestMapping("/api/activity")
 @Api(tags = "热门活动服务")
-public class HotActivityController {
+public class ActivityController {
 
     @GetMapping("/get-hot-activity-list-by-category-id/{categoryId}")
     @ApiOperation("根据类目id获取热门活动列表")
     public BizBaseResponse<HotActivityListResponse> getHotActivityListByCategoryId(@ApiParam("类目id") @PathVariable Integer categoryId) {
         return BizBaseResponse.ok(null);
     }
+
+    @GetMapping("/get-hot-activity-detail-by-id/{activityId}")
+    @ApiOperation("根据类目id获取热门活动列表")
+    public BizBaseResponse<ActivityDetailResponse> getHotActivityDetailById(@ApiParam("活动id") @PathVariable Integer activityId) {
+        return BizBaseResponse.ok(null);
+    }
+
 
 }

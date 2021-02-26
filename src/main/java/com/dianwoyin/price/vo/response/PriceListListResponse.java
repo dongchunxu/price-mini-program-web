@@ -41,6 +41,9 @@ public class PriceListListResponse implements Serializable {
         @ApiModelProperty("商品名")
         private String goodsName;
 
+        @ApiModelProperty("商品图片")
+        private String goodsImgUrl;
+
         @ApiModelProperty("支付金额")
         private BigDecimal payAmount;
 
