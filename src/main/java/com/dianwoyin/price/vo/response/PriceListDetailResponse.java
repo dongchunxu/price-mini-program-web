@@ -2,10 +2,7 @@ package com.dianwoyin.price.vo.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -56,9 +53,7 @@ public class PriceListDetailResponse implements Serializable {
     @ApiModelProperty("报价历史")
     private PriceListReplyDetail priceListReplyDetail;
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
+    @Getter
     @ApiModel("报价单详情-商品详情")
     public static class GoodsDetail {
         @ApiModelProperty("简单属性和属性值")
@@ -68,9 +63,7 @@ public class PriceListDetailResponse implements Serializable {
         private String comment;
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
+    @Getter
     @ApiModel("报价单详情-报价历史")
     public static class PriceListReplyDetail {
         @ApiModelProperty("供应商名称")
@@ -92,9 +85,7 @@ public class PriceListDetailResponse implements Serializable {
         private String comment;
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
+    @Getter
     @ApiModel("报价单详情-属性/属性值")
     public static class SimplePropPair {
 
@@ -105,9 +96,7 @@ public class PriceListDetailResponse implements Serializable {
         private String propValue;
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
+    @Getter
     @ApiModel("报价单详情-配送详情")
     public static class DeliveryDetail {
 
@@ -127,9 +116,7 @@ public class PriceListDetailResponse implements Serializable {
         private String receiverAddressDetail;
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
+    @Getter
     @ApiModel("报价单详情-订单详情")
     public static class OrderDetail {
 

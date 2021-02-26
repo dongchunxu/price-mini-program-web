@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -17,18 +18,16 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("热门活动列表")
-public class HotActivityListResponse {
+@ApiModel("活动列表")
+public class ActivityListResponse {
 
-    @ApiModelProperty("热门活动列表items")
-    private List<HotActivityListItem> hotActivityListItems;
+    @ApiModelProperty("活动列表items")
+    private List<ActivityListItem> activityListItems;
 
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @ApiModel("热门活动列表item")
-    public static class HotActivityListItem {
+    @Getter
+    @ApiModel("活动列表item")
+    public static class ActivityListItem {
         @ApiModelProperty("活动图片")
         private String activityImgUrl;
 

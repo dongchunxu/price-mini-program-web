@@ -7,7 +7,10 @@ import com.dianwoyin.price.vo.response.OrderListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author chunxu.dong
@@ -44,7 +47,7 @@ public class OrderController {
 
     @ApiOperation("创建订单")
     @PostMapping("/create")
-    public BizBaseResponse<Boolean> create(@RequestBody OrderCreateRequest createRequest) {
+    public BizBaseResponse<Boolean> create(@RequestBody @Valid OrderCreateRequest createRequest) {
         return BizBaseResponse.ok(true);
     }
 

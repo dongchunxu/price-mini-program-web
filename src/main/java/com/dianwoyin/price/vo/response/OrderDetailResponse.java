@@ -2,10 +2,7 @@ package com.dianwoyin.price.vo.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -58,30 +55,37 @@ public class OrderDetailResponse implements Serializable {
     @ApiModelProperty("支付总额")
     private BigDecimal payAmount;
 
-    @ApiModelProperty("快递渠道, 0：厂家配送，1：快递公司")
-    private Integer deliveryChannel;
+    @ApiModelProperty("配送信息")
+    private DeliveryDetail deliveryDetail;
 
-    @ApiModelProperty("快递公司名称，当deliveryChannel=1时有效")
-    private Integer deliveryChannelName;
+    @Getter
+    @ApiModel("报价单详情-配送详情")
+    public static class DeliveryDetail {
+        @ApiModelProperty("收货人名称")
+        private String receiverName;
 
-    @ApiModelProperty("快递单号, 当deliveryChannel=1时有效")
-    private String deliveryNo;
+        @ApiModelProperty("收货人电话")
+        private String receiverPhone;
 
-    @ApiModelProperty("快递员手机, 当deliveryChannel=0时有效")
-    private String deliveryPhone;
+        @ApiModelProperty("快递渠道, 0：厂家配送，1：快递公司")
+        private Integer deliveryChannel;
 
-    @ApiModelProperty("快递员姓名, 当deliveryChannel=0时有效")
-    private String deliveryPerson;
+        @ApiModelProperty("快递公司名称，当deliveryChannel=1时有效")
+        private Integer deliveryChannelName;
 
-    @ApiModelProperty("收货人名称")
-    private String receiverName;
+        @ApiModelProperty("快递单号, 当deliveryChannel=1时有效")
+        private String deliveryNo;
 
-    @ApiModelProperty("收货人电话")
-    private String receiverPhone;
+        @ApiModelProperty("快递员手机, 当deliveryChannel=0时有效")
+        private String deliveryPhone;
 
-    @ApiModelProperty("收货人地址")
-    private String receiverAddress;
+        @ApiModelProperty("快递员姓名, 当deliveryChannel=0时有效")
+        private String deliveryPerson;
 
-    @ApiModelProperty("收货人详细地址")
-    private String receiverAddressDetail;
+        @ApiModelProperty("收货人地址")
+        private String receiverAddress;
+
+        @ApiModelProperty("收货人详细地址")
+        private String receiverAddressDetail;
+    }
 }

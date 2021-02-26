@@ -2,10 +2,7 @@ package com.dianwoyin.price.vo.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -26,10 +23,7 @@ public class OrderListResponse implements Serializable {
     @ApiModelProperty("订单子项")
     private List<OrderListItem> orderListItems;
 
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
+    @Getter
     @ApiModel("订单列表item")
     public static class OrderListItem implements Serializable {
 

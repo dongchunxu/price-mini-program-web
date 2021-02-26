@@ -2,7 +2,7 @@ package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.vo.BizBaseResponse;
 import com.dianwoyin.price.vo.response.ActivityDetailResponse;
-import com.dianwoyin.price.vo.response.HotActivityListResponse;
+import com.dianwoyin.price.vo.response.ActivityListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "热门活动服务")
 public class ActivityController {
 
-    @GetMapping("/get-hot-activity-list-by-category-id/{categoryId}")
+    @GetMapping("/get-activity-list-by-category-id/{categoryId}")
     @ApiOperation("根据类目id获取热门活动列表")
-    public BizBaseResponse<HotActivityListResponse> getHotActivityListByCategoryId(@ApiParam("类目id") @PathVariable Integer categoryId) {
+    public BizBaseResponse<ActivityListResponse> getHotActivityListByCategoryId(@ApiParam("类目id") @PathVariable Integer categoryId) {
         return BizBaseResponse.ok(null);
     }
 
-    @GetMapping("/get-hot-activity-detail-by-id/{activityId}")
+    @GetMapping("/get-activity-detail-by-id/{activityId}")
     @ApiOperation("根据类目id获取热门活动列表")
     public BizBaseResponse<ActivityDetailResponse> getHotActivityDetailById(@ApiParam("活动id") @PathVariable Integer activityId) {
         return BizBaseResponse.ok(null);
