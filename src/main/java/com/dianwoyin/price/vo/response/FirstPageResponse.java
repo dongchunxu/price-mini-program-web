@@ -39,7 +39,6 @@ public class FirstPageResponse implements Serializable {
         private String categoryId;
         @ApiModelProperty("类目名称")
         private Integer categoryName;
-
     }
 
     @Data
@@ -47,8 +46,8 @@ public class FirstPageResponse implements Serializable {
     @AllArgsConstructor
     @ApiModel("热门活动item")
     public static class HotActivityItem implements Serializable {
-        @ApiModelProperty("头图")
-        private String headImgUrl;
+        @ApiModelProperty("活动图片")
+        private String activityImgUrl;
         @ApiModelProperty("活动名称")
         private String activityName;
         @ApiModelProperty("活动价格")
@@ -61,6 +60,10 @@ public class FirstPageResponse implements Serializable {
         private String supplierAvatar;
         @ApiModelProperty("类目id")
         private Integer categoryId;
+        @ApiModelProperty("省份")
+        private String province;
+        @ApiModelProperty("城市")
+        private String city;
     }
 
     @Data
