@@ -1,11 +1,11 @@
 package com.dianwoyin.price.controller;
 
-import com.dianwoyin.price.api.PriceListService;
+import com.dianwoyin.price.service.PriceListService;
 import com.dianwoyin.price.vo.BizBaseResponse;
 import com.dianwoyin.price.vo.request.PriceListConfirmPriceRequest;
 import com.dianwoyin.price.vo.request.PriceListCreateRequest;
-import com.dianwoyin.price.vo.response.PriceListDetailResponse;
-import com.dianwoyin.price.vo.response.PriceListListResponse;
+import com.dianwoyin.price.vo.response.price.PriceListDetailResponse;
+import com.dianwoyin.price.vo.response.price.PriceListListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -21,6 +21,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/price-list/")
 @Api(tags = "报价单")
+
 public class PriceListController {
 
     @Autowired
@@ -47,6 +48,6 @@ public class PriceListController {
     @ApiOperation("报价单详情")
     @GetMapping("/get-price-list-detail/{priceListId}")
     public BizBaseResponse<PriceListDetailResponse> getPriceListDetail(@ApiParam("报价单id") @PathVariable Integer priceListId) {
-        return BizBaseResponse.ok(null);
+        return null;
     }
 }

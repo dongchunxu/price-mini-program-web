@@ -1,8 +1,8 @@
 package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.vo.BizBaseResponse;
-import com.dianwoyin.price.vo.response.ActivityDetailResponse;
-import com.dianwoyin.price.vo.response.ActivityListResponse;
+import com.dianwoyin.price.vo.response.activity.ActivityDetailResponse;
+import com.dianwoyin.price.vo.response.activity.ActivityListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

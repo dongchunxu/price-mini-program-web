@@ -1,9 +1,9 @@
 package com.dianwoyin.price.controller;
 
-import com.dianwoyin.price.api.DistrictService;
+import com.dianwoyin.price.service.DistrictService;
 import com.dianwoyin.price.constants.enums.DistrictEnum;
 import com.dianwoyin.price.vo.BizBaseResponse;
-import com.dianwoyin.price.vo.response.DistrictListResponse;
+import com.dianwoyin.price.vo.response.distirct.DistrictListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

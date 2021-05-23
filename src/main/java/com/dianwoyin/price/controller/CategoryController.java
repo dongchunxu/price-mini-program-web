@@ -1,10 +1,10 @@
 package com.dianwoyin.price.controller;
 
-import com.dianwoyin.price.api.CategoryPropertyService;
-import com.dianwoyin.price.api.CategoryService;
+import com.dianwoyin.price.service.CategoryPropertyService;
+import com.dianwoyin.price.service.CategoryService;
 import com.dianwoyin.price.vo.BizBaseResponse;
-import com.dianwoyin.price.vo.response.CategoryListResponse;
-import com.dianwoyin.price.vo.response.CategoryPropListResponse;
+import com.dianwoyin.price.vo.response.category.CategoryListResponse;
+import com.dianwoyin.price.vo.response.category.CategoryPropListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

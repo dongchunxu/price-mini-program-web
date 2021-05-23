@@ -2,12 +2,11 @@ package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.vo.BizBaseResponse;
 import com.dianwoyin.price.vo.request.OrderCreateRequest;
-import com.dianwoyin.price.vo.response.OrderDetailResponse;
-import com.dianwoyin.price.vo.response.OrderListResponse;
+import com.dianwoyin.price.vo.response.order.OrderDetailResponse;
+import com.dianwoyin.price.vo.response.order.OrderListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

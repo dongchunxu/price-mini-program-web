@@ -1,6 +1,6 @@
 package com.dianwoyin.price.controller;
 
-import com.dianwoyin.price.api.MerchantService;
+import com.dianwoyin.price.service.MerchantService;
 import com.dianwoyin.price.vo.BizBaseResponse;
 import com.dianwoyin.price.vo.request.MerchantCreateRequest;
 import com.dianwoyin.price.vo.request.MerchantUpdateRequest;

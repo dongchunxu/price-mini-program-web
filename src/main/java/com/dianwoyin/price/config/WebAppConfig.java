@@ -21,6 +21,8 @@ public class WebAppConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authorizationInterceptor)
                     .addPathPatterns("/order/**", "/account/**");
+//        registry.addInterceptor(authorizationInterceptor)
+//                .addPathPatterns("/**");
     }
 
 }
