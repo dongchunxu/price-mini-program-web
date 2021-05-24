@@ -11,5 +11,5 @@ public interface FirstPageService {
     /**
      * @return
      */
-    FirstPageResponse getFirstPage(Integer cityId);
+    FirstPageResponse getFirstPageConfig(Integer cityId);
 }

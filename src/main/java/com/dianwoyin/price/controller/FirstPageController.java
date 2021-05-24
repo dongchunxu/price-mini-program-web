@@ -1,7 +1,10 @@
 package com.dianwoyin.price.controller;
 
+import com.dianwoyin.price.service.ActivityService;
 import com.dianwoyin.price.service.FirstPageService;
 import com.dianwoyin.price.vo.BizBaseResponse;
+import com.dianwoyin.price.vo.BizPageResponse;
+import com.dianwoyin.price.vo.response.firstpage.ActivityItem;
 import com.dianwoyin.price.vo.response.firstpage.FirstPageResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,10 +26,23 @@ public class FirstPageController {
     @Autowired
     private FirstPageService firstPageService;
 
+    @Autowired
+    private ActivityService activityService;
+
     @ApiOperation("获取所有分类")
-    @GetMapping("/get-first-page")
-    public BizBaseResponse<FirstPageResponse> getFirstPage(@RequestParam("cityId") Integer cityId) {
-        return BizBaseResponse.ok(firstPageService.getFirstPage(cityId));
+    @GetMapping("/get-first-page-config")
+    public BizBaseResponse<FirstPageResponse> getFirstPageConfig(@RequestParam("cityId") Integer cityId) {
+        return BizBaseResponse.ok(firstPageService.getFirstPageConfig(cityId));
     }
+
+    @ApiOperation("获取推荐活动")
+    @GetMapping("/get-recommend-activity")
+    public BizPageResponse<ActivityItem> getRecommendActivity(@RequestParam("categoryId") Integer categoryId,
+                                                              @RequestParam("cityId") Integer cityId,
+                                                              @RequestParam("page") Integer page,
+                                                              @RequestParam("pageSize") Integer pageSize) {
+        return BizPageResponse.success(activityService.getRecommendActivity(cityId, categoryId, page, pageSize));
+    }
+
 
 }

@@ -24,11 +24,8 @@ public class FirstPageResponse implements Serializable {
     @ApiModelProperty("热搜items")
     private List<HotCategoryItem> hotCategoryItems;
 
-    @ApiModelProperty("热门活动items")
-    private List<ActivityItem> activityItems;
-
     @ApiModelProperty("活动tabs")
-    private List<ActivityTab> activityTabs;
+    private List<ActivityTabItem> activityTabItems;
 
 
 }

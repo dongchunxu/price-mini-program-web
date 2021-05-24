@@ -16,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel("活动tab配置")
-public class ActivityTab implements Serializable {
+public class ActivityTabItem implements Serializable {
 
     @ApiModelProperty("类目id")
     private Integer categoryId;
