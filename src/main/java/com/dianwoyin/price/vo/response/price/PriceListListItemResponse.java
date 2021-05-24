@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Getter
 @ApiModel("报价单列表item")
-public class PriceListListItem implements Serializable {
+public class PriceListListItemResponse implements Serializable {
     @ApiModelProperty("报价单id")
     private Integer priceListId;
 

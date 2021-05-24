@@ -2,10 +2,11 @@ package com.dianwoyin.price.controller;
 
 import com.dianwoyin.price.service.PriceListService;
 import com.dianwoyin.price.vo.BizBaseResponse;
+import com.dianwoyin.price.vo.BizPageResponse;
 import com.dianwoyin.price.vo.request.PriceListConfirmPriceRequest;
 import com.dianwoyin.price.vo.request.PriceListCreateRequest;
 import com.dianwoyin.price.vo.response.price.PriceListDetailResponse;
-import com.dianwoyin.price.vo.response.price.PriceListListResponse;
+import com.dianwoyin.price.vo.response.price.PriceListListItemResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -35,8 +36,9 @@ public class PriceListController {
 
     @ApiOperation("报价单列表")
     @GetMapping("/get-price-list-list")
-    public BizBaseResponse<PriceListListResponse> getPriceListList(@ApiParam("报价单状态") @RequestParam(required = false) Integer priceListStatus) {
-        return BizBaseResponse.ok(null);
+    public BizPageResponse<PriceListListItemResponse> getPriceListList(@ApiParam("报价单状态") @RequestParam(required = false)
+                                                                               Integer priceListStatus) {
+        return BizPageResponse.success(priceListService.getPriceListList(priceListStatus));
     }
 
     @ApiOperation("采纳报价")

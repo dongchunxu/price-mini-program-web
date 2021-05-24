@@ -5,6 +5,7 @@ package com.dianwoyin.price.constants.enums;
  * @date 2020/12/14
  */
 public enum ErrorCodeEnum {
+    SUCCESS(0, "成功"),
 
     USER_NOT_EXIST(10001, "当前用户不存在~"),
     INVALID_SESSION(10002, "当前未登录，请登录后再试~"),
@@ -25,11 +26,11 @@ public enum ErrorCodeEnum {
     ;
 
     private Integer code;
-    private String message;
+    private String desc;
 
-    ErrorCodeEnum(Integer code, String message) {
+    ErrorCodeEnum(Integer code, String desc) {
         this.code = code;
-        this.message = message;
+        this.desc = desc;
     }
 
 
@@ -37,12 +38,12 @@ public enum ErrorCodeEnum {
         return code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getDesc() {
+        return desc;
     }
 
-    public ErrorCodeEnum setMessage(String message) {
-        this.message = message;
+    public ErrorCodeEnum setDesc(String desc) {
+        this.desc = desc;
         return this;
     }
 }

@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
                 msg = fieldErro.getDefaultMessage();
                 break;
             }
-            return BizBaseResponse.fail(ErrorCodeEnum.ERROR_COMMON_PARAM.setMessage(msg));
+            return BizBaseResponse.fail(ErrorCodeEnum.ERROR_COMMON_PARAM);
         }
         // 通用异常兜底
         return BizBaseResponse.fail(ErrorCodeEnum.ERROR_COMMON_5XX);

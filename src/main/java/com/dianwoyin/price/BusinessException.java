@@ -13,7 +13,7 @@ public class BusinessException extends RuntimeException{
 
     public BusinessException(ErrorCodeEnum codeConstants) {
         this.code = codeConstants.getCode();
-        this.message = codeConstants.getMessage();
+        this.message = codeConstants.getDesc();
     }
 
     public BusinessException(int code, String message) {

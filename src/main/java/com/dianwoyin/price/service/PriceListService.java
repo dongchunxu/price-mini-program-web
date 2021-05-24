@@ -1,6 +1,8 @@
 package com.dianwoyin.price.service;
 
 import com.dianwoyin.price.vo.request.PriceListCreateRequest;
+import com.dianwoyin.price.vo.response.PageResult;
+import com.dianwoyin.price.vo.response.price.PriceListListItemResponse;
 
 /**
  * @author chunxu.dong
@@ -9,4 +11,6 @@ import com.dianwoyin.price.vo.request.PriceListCreateRequest;
 public interface PriceListService {
 
     Boolean createPriceList(PriceListCreateRequest request);
+
+    PageResult<PriceListListItemResponse> getPriceListList(Integer priceListStatus);
 }

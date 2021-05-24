@@ -27,14 +27,13 @@ public class BizBaseResponse<T> {
 
     @ApiModelProperty("数据")
     private T data;
-
-
+    
     public static <T> BizBaseResponse<T> ok(T data) {
-        return new BizBaseResponse<>(0, "success", data);
+        return new BizBaseResponse(0, "success", data);
     }
 
     public static <T> BizBaseResponse<T> fail(ErrorCodeEnum codeEnum) {
-        return new BizBaseResponse<T>(codeEnum.getCode(), codeEnum.getMessage(), null);
+        return new BizBaseResponse<T>(codeEnum.getCode(), codeEnum.getDesc(), null);
     }
 
     public static <T> BizBaseResponse<T> fail(Integer code, String msg) {

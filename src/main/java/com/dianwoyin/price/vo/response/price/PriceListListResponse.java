@@ -19,6 +19,6 @@ import java.util.List;
 public class PriceListListResponse implements Serializable {
 
     @ApiModelProperty("报价单items")
-    private List<PriceListListItem> priceListItems;
+    private List<PriceListListItemResponse> priceListItems;
 
 }
