@@ -36,9 +36,9 @@ public class PriceListController {
 
     @ApiOperation("报价单列表")
     @GetMapping("/get-price-list-list")
-    public BizPageResponse<PriceListListItemResponse> getPriceListList(@ApiParam("报价单状态") @RequestParam(required = false)
-                                                                               Integer priceListStatus) {
-        return BizPageResponse.success(priceListService.getPriceListList(priceListStatus));
+    public BizPageResponse<PriceListListItemResponse> getPriceListList(@ApiParam("报价单状态, 1进行中，2已完成，3已终止") @RequestParam(required = false) Integer priceListStatus
+            ,@RequestParam("page") Integer page, @RequestParam("pageSize") Integer pageSize) {
+        return BizPageResponse.success(priceListService.getPriceListList(priceListStatus, page, pageSize));
     }
 
     @ApiOperation("采纳报价")

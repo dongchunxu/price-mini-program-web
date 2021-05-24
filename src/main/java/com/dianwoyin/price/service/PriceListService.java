@@ -12,5 +12,5 @@ public interface PriceListService {
 
     Boolean createPriceList(PriceListCreateRequest request);
 
-    PageResult<PriceListListItemResponse> getPriceListList(Integer priceListStatus);
+    PageResult<PriceListListItemResponse> getPriceListList(Integer priceListStatus, Integer page, Integer pageSize);
 }

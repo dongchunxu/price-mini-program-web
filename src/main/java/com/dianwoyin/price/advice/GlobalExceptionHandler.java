@@ -23,11 +23,13 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public BizBaseResponse<Void> error(Exception e) {
         log.error("GlobalExceptionHandler.error", e);
+
         // 业务异常
         if (e instanceof BusinessException) {
             BusinessException be = (BusinessException) e;
             return BizBaseResponse.fail(be.getCode(), be.getMessage());
         }
+
         // 参数验证
         else if (e instanceof BindException) {
             String msg = "";
@@ -38,6 +40,7 @@ public class GlobalExceptionHandler {
             }
             return BizBaseResponse.fail(ErrorCodeEnum.ERROR_COMMON_PARAM);
         }
+
         // 通用异常兜底
         return BizBaseResponse.fail(ErrorCodeEnum.ERROR_COMMON_5XX);
     }
