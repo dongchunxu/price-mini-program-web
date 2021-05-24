@@ -28,7 +28,7 @@ public class BizBaseResponse<T> {
     @ApiModelProperty("数据")
     private T data;
     
-    public static <T> BizBaseResponse<T> ok(T data) {
+    public static <T> BizBaseResponse<T> success(T data) {
         return new BizBaseResponse(0, "success", data);
     }
 

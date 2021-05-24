@@ -34,19 +34,19 @@ public class AccountController {
     @PostMapping("/login-by-phone")
     public BizBaseResponse<Boolean> loginByPhone(@ApiParam("手机号") @RequestParam("phone") String phone,
                                                  @ApiParam("短信验证码") @RequestParam("smsCode") String smsCode) {
-        return BizBaseResponse.ok(accountService.loginByPhone(phone, smsCode));
+        return BizBaseResponse.success(accountService.loginByPhone(phone, smsCode));
     }
 
     @ApiOperation("账户密码登录")
     @PostMapping("/login-by-password")
     public BizBaseResponse<Boolean> loginByPassword(@RequestParam("username") String username, @RequestParam("password") String password) {
-        return BizBaseResponse.ok(accountService.loginByPassword(username, password));
+        return BizBaseResponse.success(accountService.loginByPassword(username, password));
     }
 
     @ApiOperation("微信号登录")
     @PostMapping("/login-union-by-wx")
     public BizBaseResponse<Boolean> loginUnionByWx(@RequestParam("wxCode") String wxCode) {
-        return BizBaseResponse.ok(accountService.loginByWxUnion(wxCode));
+        return BizBaseResponse.success(accountService.loginByWxUnion(wxCode));
     }
 
     @ApiOperation("注销")
@@ -56,19 +56,19 @@ public class AccountController {
         if (login == null) {
             return BizBaseResponse.fail(ErrorCodeEnum.SESSION_OUT);
         }
-        return BizBaseResponse.ok(accountService.logout());
+        return BizBaseResponse.success(accountService.logout());
     }
 
     @ApiOperation("更新账户信息")
     @PostMapping("/update-account")
     public BizBaseResponse<Boolean> updateAccountInfo(@Validated AccountUpdateRequest accountUpdateRequest) {
-        return BizBaseResponse.ok(accountService.updateAccount(accountUpdateRequest));
+        return BizBaseResponse.success(accountService.updateAccount(accountUpdateRequest));
     }
 
     @ApiOperation("注册账号")
     @PostMapping("/register-by-phone")
     public BizBaseResponse<Boolean> registerByPhone(@Valid AccountRegisterRequest registerRequestVO) {
-        return BizBaseResponse.ok(accountService.registerByPhone(registerRequestVO.getPhone(), registerRequestVO.getSmsCode()));
+        return BizBaseResponse.success(accountService.registerByPhone(registerRequestVO.getPhone(), registerRequestVO.getSmsCode()));
     }
 
     @ApiOperation("获取账户信息")
@@ -78,18 +78,18 @@ public class AccountController {
         if (login == null) {
             return BizBaseResponse.fail(ErrorCodeEnum.INVALID_SESSION);
         }
-        return BizBaseResponse.ok(accountService.getAccountByPhone(login.getPhone()));
+        return BizBaseResponse.success(accountService.getAccountByPhone(login.getPhone()));
     }
 
     @ApiOperation("获取手机验证码")
     @GetMapping("/get-login-sms-code")
     public BizBaseResponse<Boolean> getLoginSmsCode(@RequestParam("phone") String phone) {
-        return BizBaseResponse.ok(accountService.getLoginSmsCode(phone));
+        return BizBaseResponse.success(accountService.getLoginSmsCode(phone));
     }
 
     @ApiOperation("上传头像")
     @PostMapping("/upload-avatar")
     public BizBaseResponse<String> uploadAvatar(@RequestParam("file") @NotNull MultipartFile file) {
-        return BizBaseResponse.ok(accountService.uploadAvatar(file));
+        return BizBaseResponse.success(accountService.uploadAvatar(file));
     }
 }

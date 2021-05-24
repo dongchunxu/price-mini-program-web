@@ -32,7 +32,7 @@ public class FirstPageController {
     @ApiOperation("获取所有分类")
     @GetMapping("/get-first-page-config")
     public BizBaseResponse<FirstPageResponse> getFirstPageConfig(@RequestParam("cityId") Integer cityId) {
-        return BizBaseResponse.ok(firstPageService.getFirstPageConfig(cityId));
+        return BizBaseResponse.success(firstPageService.getFirstPageConfig(cityId));
     }
 
     @ApiOperation("获取推荐活动")

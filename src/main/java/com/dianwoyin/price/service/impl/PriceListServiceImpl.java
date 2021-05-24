@@ -5,6 +5,7 @@ import com.dianwoyin.price.service.PriceListService;
 import com.dianwoyin.price.mapper.PriceListAskMapper;
 import com.dianwoyin.price.vo.request.PriceListCreateRequest;
 import com.dianwoyin.price.vo.response.PageResult;
+import com.dianwoyin.price.vo.response.price.PriceListDetailResponse;
 import com.dianwoyin.price.vo.response.price.PriceListListItemResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,5 +61,15 @@ public class PriceListServiceImpl implements PriceListService {
         c2.setGoodsName("不干胶cccc22222");
         dataList.add(c2);
         return PageResult.of(dataList, page, pageSize, total);
+    }
+
+    @Override
+    public PriceListDetailResponse getPriceListDetail(Integer priceListId) {
+        return null;
+    }
+
+    @Override
+    public Boolean confirmPrice(Integer priceListId, Integer priceListReplyId, String operator) {
+        return true;
     }
 }

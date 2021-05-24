@@ -24,4 +24,21 @@ public interface OrderService {
      * @return
      */
     OrderDetailResponse getOrderDetail(Integer orderId);
+
+
+    /**
+     * 删除订单
+     * @param orderId
+     * @param operator
+     * @return
+     */
+    Boolean deleteOrder(Integer orderId, String operator);
+
+
+    /**
+     * 确认收货
+     * @param orderId
+     * @return
+     */
+    Boolean confirmReceipt(Integer orderId);
 }

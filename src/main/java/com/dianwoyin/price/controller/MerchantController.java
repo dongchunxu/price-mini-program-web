@@ -29,12 +29,12 @@ public class MerchantController {
     @PostMapping("/create")
     @ApiOperation("创建商户")
     public BizBaseResponse<Boolean> create(@Valid @RequestBody MerchantCreateRequest merchantCreateRequest) {
-        return BizBaseResponse.ok(merchantService.create(merchantCreateRequest));
+        return BizBaseResponse.success(merchantService.create(merchantCreateRequest));
     }
 
     @PostMapping("/update")
     @ApiOperation("更新商户")
     public BizBaseResponse<Boolean> update(@Valid @RequestBody MerchantUpdateRequest merchantUpdateRequest) {
-        return BizBaseResponse.ok(merchantService.update(merchantUpdateRequest));
+        return BizBaseResponse.success(merchantService.update(merchantUpdateRequest));
     }
 }

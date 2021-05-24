@@ -33,19 +33,19 @@ public class CategoryController {
     @ApiOperation("搜索分类")
     @GetMapping("/category/search")
     public BizBaseResponse<List<CategoryListResponse>> search(@ApiParam("关键词") String keyword) {
-        return BizBaseResponse.ok(null);
+        return BizBaseResponse.success(null);
     }
 
     @ApiOperation("获取所有分类")
     @GetMapping("/get-all-category-list")
     public BizBaseResponse<List<CategoryListResponse>> getAllCategoryList() {
-        return BizBaseResponse.ok(categoryService.getAllCategoryList());
+        return BizBaseResponse.success(categoryService.getAllCategoryList());
     }
 
     @ApiOperation("获取属性和属性值")
     @GetMapping("/get-prop-value-by-category-id/{categoryId}")
     public BizBaseResponse<CategoryPropListResponse> getCategoryPropPropValueByCategoryId(@ApiParam("类目id") @PathVariable Integer categoryId) {
-        return BizBaseResponse.ok(categoryPropertyService.getPropertyListByCategoryId(categoryId));
+        return BizBaseResponse.success(categoryPropertyService.getPropertyListByCategoryId(categoryId));
     }
 
 }

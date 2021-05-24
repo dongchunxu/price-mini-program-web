@@ -26,16 +26,17 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+
     @ApiOperation("确认收货")
     @PostMapping("/confirm-receipt/{orderId}")
     public BizBaseResponse<Boolean> confirmReceipt(@ApiParam("订单id") @PathVariable Integer orderId) {
-        return BizBaseResponse.ok(true);
+        return BizBaseResponse.success(orderService.confirmReceipt(orderId));
     }
 
     @ApiOperation("删除订单")
     @PostMapping("/delete/{orderId}")
     public BizBaseResponse<Boolean> delete(@ApiParam("订单id") @PathVariable Integer orderId) {
-        return BizBaseResponse.ok(true);
+        return BizBaseResponse.success(orderService.deleteOrder(orderId, null));
     }
 
     @ApiOperation("获取订单列表")
@@ -47,17 +48,16 @@ public class OrderController {
         return BizPageResponse.success(orderService.getOrderList(userId, orderStatus, page, pageSize));
     }
 
+
     @ApiOperation("获取订单详情")
     @GetMapping("/get-order-detail/{orderId}")
     public BizBaseResponse<OrderDetailResponse> orderDetail(@ApiParam("订单id") @PathVariable Integer orderId) {
-        return BizBaseResponse.ok(orderService.getOrderDetail(orderId));
+        return BizBaseResponse.success(orderService.getOrderDetail(orderId));
     }
 
     @ApiOperation("创建订单")
     @PostMapping("/create")
-    public BizBaseResponse<Boolean> create(@RequestBody @Valid OrderCreateRequest createRequest) {
-        return BizBaseResponse.ok(true);
+    public BizBaseResponse<Boolean> create(@RequestBody @Valid OrderCreateRequest request) {
+        return BizBaseResponse.success(true);
     }
-
-
 }

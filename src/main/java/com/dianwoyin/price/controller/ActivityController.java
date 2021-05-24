@@ -23,13 +23,13 @@ public class ActivityController {
     @GetMapping("/get-activity-list-by-category-id/{categoryId}")
     @ApiOperation("根据类目id获取热门活动列表")
     public BizBaseResponse<ActivityListResponse> getHotActivityListByCategoryId(@ApiParam("类目id") @PathVariable Integer categoryId) {
-        return BizBaseResponse.ok(null);
+        return BizBaseResponse.success(null);
     }
 
     @GetMapping("/get-activity-detail-by-id/{activityId}")
     @ApiOperation("根据类目id获取热门活动列表")
     public BizBaseResponse<ActivityDetailResponse> getHotActivityDetailById(@ApiParam("活动id") @PathVariable Integer activityId) {
-        return BizBaseResponse.ok(null);
+        return BizBaseResponse.success(null);
     }
 
 

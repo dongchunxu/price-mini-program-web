@@ -63,6 +63,16 @@ public class OrderServiceImpl implements OrderService {
         return response;
     }
 
+    @Override
+    public Boolean deleteOrder(Integer orderId, String operator) {
+        return true;
+    }
+
+    @Override
+    public Boolean confirmReceipt(Integer orderId) {
+        return true;
+    }
+
 
     private OrderListItemResponse mock(Integer orderId, Integer orderStatus) {
         OrderListItemResponse response = new OrderListItemResponse();

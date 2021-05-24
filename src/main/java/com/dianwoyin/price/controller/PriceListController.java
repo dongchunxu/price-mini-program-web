@@ -31,7 +31,7 @@ public class PriceListController {
     @ApiOperation("创建报价单")
     @PostMapping("/create")
     public BizBaseResponse<Boolean> createPriceList(@Valid @RequestBody PriceListCreateRequest request) {
-        return BizBaseResponse.ok(priceListService.createPriceList(request));
+        return BizBaseResponse.success(priceListService.createPriceList(request));
     }
 
     @ApiOperation("报价单列表")
@@ -44,12 +44,15 @@ public class PriceListController {
     @ApiOperation("采纳报价")
     @PostMapping("/confirm-price")
     public BizBaseResponse<Boolean> confirmPrice(@Valid @RequestBody PriceListConfirmPriceRequest confirmRequest) {
-        return BizBaseResponse.ok(null);
+        Integer priceListId = null;
+        Integer priceListReplyId = null;
+        String operator = null;
+        return BizBaseResponse.success(priceListService.confirmPrice(priceListId, priceListReplyId, operator));
     }
 
     @ApiOperation("报价单详情")
     @GetMapping("/get-price-list-detail/{priceListId}")
     public BizBaseResponse<PriceListDetailResponse> getPriceListDetail(@ApiParam("报价单id") @PathVariable Integer priceListId) {
-        return null;
+        return BizBaseResponse.success(priceListService.getPriceListDetail(priceListId));
     }
 }
