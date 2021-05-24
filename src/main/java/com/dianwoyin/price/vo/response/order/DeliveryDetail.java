@@ -2,13 +2,14 @@ package com.dianwoyin.price.vo.response.order;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.Getter;
 
 /**
  * @author chunxu.dong
  * @date 2021/5/24
  */
-@Getter
+@Data
 @ApiModel("报价单详情-配送详情")
 public class DeliveryDetail {
     @ApiModelProperty("收货人名称")
@@ -21,7 +22,7 @@ public class DeliveryDetail {
     private Integer deliveryChannel;
 
     @ApiModelProperty("快递公司名称，当deliveryChannel=1时有效")
-    private Integer deliveryChannelName;
+    private String deliveryChannelName;
 
     @ApiModelProperty("快递单号, 当deliveryChannel=1时有效")
     private String deliveryNo;

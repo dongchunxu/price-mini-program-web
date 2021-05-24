@@ -1,12 +1,15 @@
 package com.dianwoyin.price.controller;
 
+import com.dianwoyin.price.service.OrderService;
 import com.dianwoyin.price.vo.BizBaseResponse;
+import com.dianwoyin.price.vo.BizPageResponse;
 import com.dianwoyin.price.vo.request.OrderCreateRequest;
 import com.dianwoyin.price.vo.response.order.OrderDetailResponse;
-import com.dianwoyin.price.vo.response.order.OrderListResponse;
+import com.dianwoyin.price.vo.response.order.OrderListItemResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,6 +22,9 @@ import javax.validation.Valid;
 @RequestMapping("/api/order")
 @Api(tags = "订单服务")
 public class OrderController {
+
+    @Autowired
+    private OrderService orderService;
 
     @ApiOperation("确认收货")
     @PostMapping("/confirm-receipt/{orderId}")
@@ -34,14 +40,17 @@ public class OrderController {
 
     @ApiOperation("获取订单列表")
     @GetMapping("/get-order-list")
-    public BizBaseResponse<OrderListResponse> orderList(@ApiParam("订单状态") @RequestParam(required = false) Integer orderStatus) {
-        return BizBaseResponse.ok(null);
+    public BizPageResponse<OrderListItemResponse> orderList(
+            @ApiParam("订单状态, 1待支付/2待发货/3待收货/4已完成/5待退款") @RequestParam(required = false) Integer orderStatus,
+                    @RequestParam("page") Integer page, @RequestParam("pageSize") Integer pageSize) {
+        Integer userId = null;
+        return BizPageResponse.success(orderService.getOrderList(userId, orderStatus, page, pageSize));
     }
 
     @ApiOperation("获取订单详情")
     @GetMapping("/get-order-detail/{orderId}")
     public BizBaseResponse<OrderDetailResponse> orderDetail(@ApiParam("订单id") @PathVariable Integer orderId) {
-        return BizBaseResponse.ok(null);
+        return BizBaseResponse.ok(orderService.getOrderDetail(orderId));
     }
 
     @ApiOperation("创建订单")

@@ -3,6 +3,7 @@ package com.dianwoyin.price.vo.response.order;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -13,9 +14,9 @@ import java.util.Date;
  * @author chunxu.dong
  * @date 2021/5/24
  */
-@Getter
+@Data
 @ApiModel("订单列表item")
-public class OrderListItem implements Serializable {
+public class OrderListItemResponse implements Serializable {
 
     @ApiModelProperty("订单id")
     private Integer orderId;

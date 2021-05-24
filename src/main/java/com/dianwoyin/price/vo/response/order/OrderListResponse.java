@@ -19,6 +19,6 @@ import java.util.List;
 public class OrderListResponse implements Serializable {
 
     @ApiModelProperty("订单子项")
-    private List<OrderListItem> orderListItems;
+    private List<OrderListItemResponse> orderListItemResponses;
 
 }

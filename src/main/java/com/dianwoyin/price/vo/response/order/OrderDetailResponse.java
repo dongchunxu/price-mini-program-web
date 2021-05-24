@@ -24,7 +24,7 @@ public class OrderDetailResponse implements Serializable {
     private Integer orderId;
 
     @ApiModelProperty("订单no")
-    private Integer orderNo;
+    private String orderNo;
 
     @ApiModelProperty("订单状态, 1:待支付,2:待发货,3:待收货,4:已退款,5:已完成")
     private Integer orderStatus;
