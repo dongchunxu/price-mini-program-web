@@ -62,6 +62,18 @@ public class FirstPageServiceImpl implements FirstPageService {
         categoryItem.setName("不干胶六折优惠");
         categoryItem.setType(1);
         result.add(categoryItem);
+
+        HotCategoryItem categoryItem2= new HotCategoryItem();
+        categoryItem2.setId(11);
+        categoryItem2.setName("名片限时四折起");
+        categoryItem2.setType(1);
+        result.add(categoryItem2);
+
+        HotCategoryItem categoryItem3= new HotCategoryItem();
+        categoryItem3.setId(13);
+        categoryItem3.setName("【年货】对联");
+        categoryItem3.setType(1);
+        result.add(categoryItem3);
         return result;
     }
 
