@@ -3,6 +3,8 @@ package com.dianwoyin.price.service.impl;
 import com.dianwoyin.price.mapper.ActivityMapper;
 import com.dianwoyin.price.service.ActivityService;
 import com.dianwoyin.price.vo.response.PageResult;
+import com.dianwoyin.price.vo.response.activity.ActivityBuyer;
+import com.dianwoyin.price.vo.response.activity.ActivityDetailResponse;
 import com.dianwoyin.price.vo.response.firstpage.ActivityItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +25,37 @@ public class ActivityServiceImpl implements ActivityService {
     private ActivityMapper activityMapper;
 
     @Override
-    public PageResult<ActivityItem> getRecommendActivity(Integer cityId, Integer categoryId, Integer page, Integer pageSize) {
+    public PageResult<ActivityItem> getRecommendActivityPage(Integer cityId, Integer categoryId, Integer page, Integer pageSize) {
         List<ActivityItem> activityItems = mockActivityItem(cityId);
         return PageResult.of(activityItems, page, pageSize, activityItems.size());
+    }
+
+    @Override
+    public ActivityDetailResponse getActivityDetail(Integer activityId) {
+        List<String> tags = new ArrayList<>();
+        tags.add("免邮费");
+
+        List<String> descriptionUrls = new ArrayList<>();
+        descriptionUrls.add("https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF,https://t7.baidu.com/it/u=737555197,308540855&fm=193&f=GIF");
+
+        List<ActivityBuyer> buyersInfo = new ArrayList<>();
+        ActivityBuyer build =
+                ActivityBuyer.builder()
+                .buyerAvatar("https://t7.baidu.com/it/u=841539266,3457438987&fm=193&f=GIF")
+                .buyTime("2小时前")
+                .buyerName("张三")
+                .build();
+        buyersInfo.add(build);
+        return ActivityDetailResponse.builder()
+                .activityName("活动详情数据test")
+                .amount(BigDecimal.valueOf(122.2))
+                .originAmount(BigDecimal.valueOf(155.33))
+                .saleQty(11)
+                .tags(tags)
+                .activityImgUrl("")
+                .descriptionUrls(descriptionUrls)
+                .buyersInfo(buyersInfo)
+                .build();
     }
 
 
@@ -41,7 +71,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     ActivityItem loop(String coName, String goodsImgUrl) {
         ActivityItem activityItem = new ActivityItem();
-        activityItem.setActivityName("名片八折优惠，下单");
+        activityItem.setActivityName("名片下单两盒2元起，江浙沪地区送货上门");
         activityItem.setActivityPrice(BigDecimal.valueOf(12,2));
         activityItem.setActivityImgUrl(goodsImgUrl);
         activityItem.setActivityEndTime(new Date());

@@ -2,6 +2,7 @@ package com.dianwoyin.price.vo.response.price;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author chunxu.dong
  * @date 2021/5/24
  */
-@Getter
+@Data
 @ApiModel("报价单详情-商品详情")
 public class GoodsDetail {
     @ApiModelProperty("简单属性和属性值")

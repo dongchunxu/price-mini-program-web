@@ -53,6 +53,6 @@ public class PriceListDetailResponse implements Serializable {
     private OrderDetail orderDetail;
 
     @ApiModelProperty("报价历史")
-    private PriceListReplyDetail priceListReplyDetail;
+    private List<PriceListReplyDetail> priceListReplyList;
 
 }

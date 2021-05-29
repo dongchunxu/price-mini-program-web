@@ -1,6 +1,7 @@
 package com.dianwoyin.price.service;
 
 import com.dianwoyin.price.vo.response.PageResult;
+import com.dianwoyin.price.vo.response.activity.ActivityDetailResponse;
 import com.dianwoyin.price.vo.response.firstpage.ActivityItem;
 
 /**
@@ -9,5 +10,7 @@ import com.dianwoyin.price.vo.response.firstpage.ActivityItem;
  */
 public interface ActivityService {
 
-    PageResult<ActivityItem> getRecommendActivity(Integer cityId, Integer categoryId, Integer page, Integer pageSize);
+    PageResult<ActivityItem> getRecommendActivityPage(Integer cityId, Integer categoryId, Integer page, Integer pageSize);
+
+    ActivityDetailResponse getActivityDetail(Integer activityId);
 }

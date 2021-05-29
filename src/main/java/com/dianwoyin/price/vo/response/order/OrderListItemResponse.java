@@ -36,4 +36,10 @@ public class OrderListItemResponse implements Serializable {
 
     @ApiModelProperty("支付金额")
     private BigDecimal payAmount;
+
+    @ApiModelProperty("商品名")
+    private String goodsName;
+
+    @ApiModelProperty("商品图片")
+    private String goodsImgUrl;
 }

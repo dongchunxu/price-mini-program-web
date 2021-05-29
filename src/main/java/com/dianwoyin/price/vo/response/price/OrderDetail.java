@@ -3,6 +3,7 @@ package com.dianwoyin.price.vo.response.price;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.Date;
  * @author chunxu.dong
  * @date 2021/5/24
  */
-@Getter
+@Data
 @ApiModel("报价单详情-订单详情")
 public class OrderDetail {
 

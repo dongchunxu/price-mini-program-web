@@ -41,7 +41,7 @@ public class FirstPageController {
                                                               @RequestParam("cityId") Integer cityId,
                                                               @RequestParam("page") Integer page,
                                                               @RequestParam("pageSize") Integer pageSize) {
-        return BizPageResponse.success(activityService.getRecommendActivity(cityId, categoryId, page, pageSize));
+        return BizPageResponse.success(activityService.getRecommendActivityPage(cityId, categoryId, page, pageSize));
     }
 
 

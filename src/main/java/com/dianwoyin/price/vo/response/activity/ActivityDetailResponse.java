@@ -3,6 +3,7 @@ package com.dianwoyin.price.vo.response.activity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,9 +18,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel("活动详情")
+@Builder
 public class ActivityDetailResponse {
 
-    @ApiModelProperty("活动图片")
+    @ApiModelProperty("活动图片,逗号分隔")
     private String activityImgUrl;
 
     @ApiModelProperty("活动名称")

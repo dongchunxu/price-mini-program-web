@@ -52,6 +52,21 @@ public class FirstPageServiceImpl implements FirstPageService {
         tab3.setCategoryName("名片");
         result.add(tab3);
 
+        ActivityTabItem tab4 = new ActivityTabItem();
+        tab4.setCategoryId(12);
+        tab4.setCategoryName("手提带");
+        result.add(tab4);
+
+        ActivityTabItem tab5 = new ActivityTabItem();
+        tab5.setCategoryId(12);
+        tab5.setCategoryName("标准画册");
+        result.add(tab5);
+
+        ActivityTabItem tab6 = new ActivityTabItem();
+        tab6.setCategoryId(13);
+        tab6.setCategoryName("喷画条幅");
+        result.add(tab6);
+
         return result;
     }
 
