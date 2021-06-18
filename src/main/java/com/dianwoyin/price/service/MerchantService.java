@@ -1,5 +1,6 @@
 package com.dianwoyin.price.service;
 
+import com.dianwoyin.price.dto.MerchantDTO;
 import com.dianwoyin.price.vo.request.MerchantCreateRequest;
 import com.dianwoyin.price.vo.request.MerchantUpdateRequest;
 
@@ -14,13 +15,18 @@ public interface MerchantService {
      * @param merchantCreateRequest
      * @return
      */
-    Boolean create(MerchantCreateRequest merchantCreateRequest);
+    Boolean createMerchant(MerchantCreateRequest merchantCreateRequest);
 
     /**
      * 更新商户信息
      * @param merchantUpdateRequest
      * @return
      */
-    Boolean update(MerchantUpdateRequest merchantUpdateRequest);
+    Boolean updateMerchant(MerchantUpdateRequest merchantUpdateRequest);
 
+
+    /**
+     * 获取商户信息
+     * */
+    MerchantDTO getMerchant(String userId);
 }

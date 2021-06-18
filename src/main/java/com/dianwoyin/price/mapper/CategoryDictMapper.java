@@ -1,25 +1,16 @@
 package com.dianwoyin.price.mapper;
 
-import com.dianwoyin.price.entity.CategoryDict;
-
-import java.util.List;
+import com.dianwoyin.price.model.CategoryDict;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @author chunxu.dong
- * @date 2020/12/19
+ * <p>
+ * 类目定义表 Mapper 接口
+ * </p>
+ *
+ * @author dongchunxu
+ * @since 2021-06-07
  */
-public interface CategoryDictMapper {
-    int deleteByPrimaryKey(Integer id);
+public interface CategoryDictMapper extends BaseMapper<CategoryDict> {
 
-    int insert(CategoryDict record);
-
-    int insertSelective(CategoryDict record);
-
-    CategoryDict selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(CategoryDict record);
-
-    int updateByPrimaryKey(CategoryDict record);
-
-    List<CategoryDict> selectList();
 }

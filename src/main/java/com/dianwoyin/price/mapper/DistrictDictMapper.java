@@ -1,29 +1,16 @@
 package com.dianwoyin.price.mapper;
 
-import com.dianwoyin.price.entity.DistrictDict;
-
-import java.util.List;
+import com.dianwoyin.price.model.DistrictDict;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @author chunxu.dong
- * @date 2020/12/14
+ * <p>
+ * 行政区域定义表 Mapper 接口
+ * </p>
+ *
+ * @author dongchunxu
+ * @since 2021-06-07
  */
-public interface DistrictDictMapper {
-    int deleteByPrimaryKey(Integer id);
+public interface DistrictDictMapper extends BaseMapper<DistrictDict> {
 
-    int insert(DistrictDict record);
-
-    int insertSelective(DistrictDict record);
-
-    DistrictDict selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(DistrictDict record);
-
-    int updateByPrimaryKey(DistrictDict record);
-
-    List<DistrictDict> selectList();
-
-    List<DistrictDict> selectByParentId(Integer parentId);
-
-    List<DistrictDict> selectByLevel(Integer level);
 }

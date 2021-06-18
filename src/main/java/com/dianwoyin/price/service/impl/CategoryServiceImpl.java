@@ -1,9 +1,9 @@
 package com.dianwoyin.price.service.impl;
 
+import com.dianwoyin.price.respository.CategoryRepository;
 import com.dianwoyin.price.service.CategoryService;
 import com.dianwoyin.price.service.RedisService;
-import com.dianwoyin.price.entity.CategoryDict;
-import com.dianwoyin.price.mapper.CategoryDictMapper;
+import com.dianwoyin.price.model.CategoryDict;
 import com.dianwoyin.price.utils.ConvertUtils;
 import com.dianwoyin.price.vo.response.category.CategoryListResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +25,9 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
-    private CategoryDictMapper categoryDictMapper;
-    @Autowired
     private RedisService redisService;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Override
     public List<CategoryListResponse> getAllCategoryList() {
@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         List<CategoryListResponse> ret = new ArrayList<>();
                 // 获取全量的类目信息
-        List<CategoryDict> categoryDictList = categoryDictMapper.selectList();
+        List<CategoryDict> categoryDictList = categoryRepository.queryAllCategory();
 
         List<CategoryListResponse> categoryDictResponseList = ConvertUtils.convert(categoryDictList);
         if (CollectionUtils.isEmpty(categoryDictResponseList)) {

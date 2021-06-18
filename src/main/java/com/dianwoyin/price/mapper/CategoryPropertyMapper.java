@@ -1,25 +1,16 @@
 package com.dianwoyin.price.mapper;
 
-import com.dianwoyin.price.entity.CategoryProperty;
-
-import java.util.List;
+import com.dianwoyin.price.model.CategoryProperty;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @author chunxu.dong
- * @date 2020/12/12
+ * <p>
+ * 类目属性定义表 Mapper 接口
+ * </p>
+ *
+ * @author dongchunxu
+ * @since 2021-06-07
  */
-public interface CategoryPropertyMapper {
-    int deleteByPrimaryKey(Integer id);
+public interface CategoryPropertyMapper extends BaseMapper<CategoryProperty> {
 
-    int insert(CategoryProperty record);
-
-    int insertSelective(CategoryProperty record);
-
-    CategoryProperty selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(CategoryProperty record);
-
-    int updateByPrimaryKey(CategoryProperty record);
-
-    List<CategoryProperty> selectByCategoryId(Integer categoryId);
 }

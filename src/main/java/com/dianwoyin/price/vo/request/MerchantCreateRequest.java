@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -21,54 +22,42 @@ import javax.validation.constraints.NotNull;
 public class MerchantCreateRequest {
 
     @ApiModelProperty("商户名")
-    @NotNull(message = "商户名不能为空")
+    @NotEmpty(message = "商户名不能为空")
     private String merchantName;
 
+    @ApiModelProperty("姓名")
+    @NotEmpty(message = "姓名不能为空")
+    private String realName;
+
+    @ApiModelProperty("邀请码")
+    @NotEmpty(message = "邀请码不能为空")
+    private String inviteCode;
+
+    @ApiModelProperty("经营类型")
+    @NotEmpty(message = "经营类型不能为空")
+    private String businessType;
+
+    @ApiModelProperty("收货人")
+    @NotEmpty(message = "收货人不能为空")
+    private String receiverName;
+
+    @ApiModelProperty("收货人手机号码")
+    @NotEmpty(message = "收货人手机号码不能为空")
+    private String receiverPhone;
+
     @ApiModelProperty("图片url")
-    @NotNull(message = "图片不能为空")
+    @NotEmpty(message = "图片不能为空")
     private String imgUrl;
 
-    @ApiModelProperty("类目id")
-    @NotNull(message = "类目不能为空")
-    private Integer categoryId;
-
-    @ApiModelProperty("联系人姓名")
-    @NotNull(message = "联系人姓名不能为空")
-    private String contactName;
-
-    @ApiModelProperty("联系号码")
-    @NotNull(message = "联系号码不能为空")
-    private String contactPhone;
-
-    @ApiModelProperty("省份")
-    @NotNull(message = "省份不能为空")
-    private String province;
-
-    @ApiModelProperty("城市")
-    @NotNull(message = "城市不能为空")
-    private String city;
-
-    @ApiModelProperty("区")
-    @NotNull(message = "区不能为空")
-    private String district;
-
-    @ApiModelProperty("街道")
-    @NotNull(message = "街道不能为空")
-    private String street;
-
-    @ApiModelProperty("详细地址")
-    @NotNull(message = "详细地址不能为空")
-    private String addressDetail;
-
-    @ApiModelProperty("规范化地址")
-    @NotNull(message = "规范化地址不能为空")
-    private String formattedAddress;
-
     @ApiModelProperty("纬度")
-    @NotNull(message = "经纬度不能为空")
+    @NotEmpty(message = "经纬度不能为空")
     private String latitude;
 
     @ApiModelProperty("经度")
-    @NotNull(message = "经纬度不能为空")
+    @NotEmpty(message = "经纬度不能为空")
     private String longitude;
+
+    @ApiModelProperty("详细地址")
+    @NotEmpty(message = "详细地址不能为空")
+    private String addressDetail;
 }

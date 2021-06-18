@@ -1,10 +1,11 @@
 package com.dianwoyin.price.service.impl;
 
-import com.dianwoyin.price.mapper.ActivityMapper;
+import com.dianwoyin.price.respository.ActivityRepository;
 import com.dianwoyin.price.service.ActivityService;
 import com.dianwoyin.price.vo.response.PageResult;
 import com.dianwoyin.price.vo.response.activity.ActivityBuyer;
 import com.dianwoyin.price.vo.response.activity.ActivityDetailResponse;
+import com.dianwoyin.price.vo.response.activity.Supplier;
 import com.dianwoyin.price.vo.response.firstpage.ActivityItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ import java.util.List;
 public class ActivityServiceImpl implements ActivityService {
 
     @Autowired
-    private ActivityMapper activityMapper;
+    private ActivityRepository activityRepository;
 
     @Override
     public PageResult<ActivityItem> getRecommendActivityPage(Integer cityId, Integer categoryId, Integer page, Integer pageSize) {
@@ -46,7 +47,18 @@ public class ActivityServiceImpl implements ActivityService {
                 .buyerName("张三")
                 .build();
         buyersInfo.add(build);
+
+        Supplier supplier = new Supplier();
+        supplier.setSupplierAddress("河南郑州");
+        supplier.setFreightPrice(BigDecimal.valueOf(40,0));
+        supplier.setGoodsNo("KS1212212");
+        supplier.setSupplierAvatar("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Ffiles.bbs.tl.changyou.com%2Fdata%2Fattachment%2Fforum%2F201508%2F04%2F115041d8rtar5rzl9bz3j8.jpg&refer=http%3A%2F%2Ffiles.bbs.tl.changyou.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624971663&t=745ab4614517c68808567816f90cf52e");
+        supplier.setSupplierName("华东彩印有限公司");
+        List<String> tags2 = new ArrayList<>();
+        tags2.add("保证金");
+        supplier.setTags(tags2);
         return ActivityDetailResponse.builder()
+                .activityId(activityId)
                 .activityName("活动详情数据test")
                 .amount(BigDecimal.valueOf(122.2))
                 .originAmount(BigDecimal.valueOf(155.33))
@@ -55,6 +67,7 @@ public class ActivityServiceImpl implements ActivityService {
                 .activityImgUrl("")
                 .descriptionUrls(descriptionUrls)
                 .buyersInfo(buyersInfo)
+                .supplierInfo(supplier)
                 .build();
     }
 
@@ -71,6 +84,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     ActivityItem loop(String coName, String goodsImgUrl) {
         ActivityItem activityItem = new ActivityItem();
+        activityItem.setActivityId(1);
         activityItem.setActivityName("名片下单两盒2元起，江浙沪地区送货上门");
         activityItem.setActivityPrice(BigDecimal.valueOf(12,2));
         activityItem.setActivityImgUrl(goodsImgUrl);

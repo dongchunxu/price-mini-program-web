@@ -1,21 +1,16 @@
 package com.dianwoyin.price.mapper;
 
-import com.dianwoyin.price.entity.Activity;
+import com.dianwoyin.price.model.Activity;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @author chunxu.dong
- * @date 2020/12/12
+ * <p>
+ * 活动表 Mapper 接口
+ * </p>
+ *
+ * @author dongchunxu
+ * @since 2021-06-07
  */
-public interface ActivityMapper {
-    int deleteByPrimaryKey(Integer id);
+public interface ActivityMapper extends BaseMapper<Activity> {
 
-    int insert(Activity record);
-
-    int insertSelective(Activity record);
-
-    Activity selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(Activity record);
-
-    int updateByPrimaryKey(Activity record);
 }

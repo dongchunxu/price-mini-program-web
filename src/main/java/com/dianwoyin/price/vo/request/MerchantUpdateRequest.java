@@ -24,35 +24,14 @@ public class MerchantUpdateRequest {
     @NotNull
     private Integer id;
 
-    @ApiModelProperty("商户名")
-    private String merchantName;
-
-    @ApiModelProperty("图片url")
-    private String imgUrl;
-
     @ApiModelProperty("联系人姓名")
-    private String contactName;
+    private String receiverName;
 
     @ApiModelProperty("联系号码")
-    private String contactPhone;
-
-    @ApiModelProperty("省份")
-    private String province;
-    
-    @ApiModelProperty("城市")
-    private String city;
-
-    @ApiModelProperty("区")
-    private String district;
-
-    @ApiModelProperty("街道")
-    private String street;
+    private String receiverPhone;
 
     @ApiModelProperty("详细地址")
     private String addressDetail;
-
-    @ApiModelProperty("规范化地址")
-    private String formattedAddress;
 
     @ApiModelProperty("纬度")
     private String latitude;

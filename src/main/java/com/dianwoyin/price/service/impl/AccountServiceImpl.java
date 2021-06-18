@@ -2,6 +2,7 @@ package com.dianwoyin.price.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.dianwoyin.price.BusinessException;
+import com.dianwoyin.price.respository.AccountRepository;
 import com.dianwoyin.price.service.AccountService;
 import com.dianwoyin.price.service.QcloudFileService;
 import com.dianwoyin.price.service.RedisService;
@@ -10,9 +11,8 @@ import com.dianwoyin.price.constants.enums.AccountStatusEnum;
 import com.dianwoyin.price.constants.enums.ErrorCodeEnum;
 import com.dianwoyin.price.dto.UserLogin;
 import com.dianwoyin.price.dto.WxLoginResponseDTO;
-import com.dianwoyin.price.entity.Account;
+import com.dianwoyin.price.model.Account;
 import com.dianwoyin.price.helper.AccountLoginHelper;
-import com.dianwoyin.price.mapper.AccountMapper;
 import com.dianwoyin.price.utils.EncryptUtils;
 import com.dianwoyin.price.utils.HttpClientUtils;
 import com.dianwoyin.price.utils.PriceBeanUtils;
@@ -26,6 +26,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -44,9 +45,9 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private RedisService redisService;
     @Autowired
-    private AccountMapper accountMapper;
-    @Autowired
     private QcloudFileService qcloudFileService;
+    @Autowired
+    private AccountRepository accountRepository;
 
 
     @Override
@@ -59,7 +60,7 @@ public class AccountServiceImpl implements AccountService {
             }
 
             // 查询open id 是否已经存在
-            Account account = accountMapper.selectByOpenId(wxLoginResponseDTO.getOpenId());
+            Account account = accountRepository.queryAccountByOpenId(wxLoginResponseDTO.getOpenId());
             if (account == null) {
                 account = quickRegister(wxLoginResponseDTO.getOpenId());
             }
@@ -88,7 +89,7 @@ public class AccountServiceImpl implements AccountService {
             throw new BusinessException(ERROR_SMS_CODE);
         }
 
-        Account account = accountMapper.selectByPhone(phone);
+        Account account = accountRepository.queryAccountByPhone(phone);
         if (account == null) {
             throw new BusinessException(USER_NOT_EXIST);
         }
@@ -100,7 +101,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Boolean loginByPassword(String username, String password) {
         String encryptPass = EncryptUtils.md5(password);
-        Account account = accountMapper.selectByUsernameAndPassword(username, encryptPass);
+        Account account = accountRepository.queryAccountByUsernameAndPassword(username, encryptPass);
         if (account == null) {
             throw new BusinessException(USER_NOT_EXIST);
         }
@@ -128,7 +129,7 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateAccount(AccountUpdateRequest accountUpdateRequest) {
         Account updateAccount = PriceBeanUtils.copyProperty(accountUpdateRequest, Account.class);
-        accountMapper.updateByPrimaryKeySelective(updateAccount);
+        accountRepository.updateAccount(updateAccount);
         return true;
     }
 
@@ -140,7 +141,6 @@ public class AccountServiceImpl implements AccountService {
             throw new BusinessException(ERROR_SMS_CODE);
         }
 
-        Date now = new Date();
         String loginIp = AccountLoginHelper.getLoginIp();
 
         Account newAccount = Account.builder()
@@ -150,25 +150,24 @@ public class AccountServiceImpl implements AccountService {
                 .status(AccountStatusEnum.NoReview.getCode())
                 .firstName("")
                 .lastName("")
-                .sex(0)
+                .sex(true)
                 .lastLoginIp(loginIp)
-                .lastLoginTime(now)
+                .lastLoginTime(LocalDateTime.now())
                 .inviteCode("")
                 .openId("")
-                .createTime(now)
-                .updateTime(now)
+                .createTime(LocalDateTime.now())
+                .updateTime(LocalDateTime.now())
                 .deleted(false)
                 .build();
 
-        accountMapper.insert(newAccount);
-
+        accountRepository.addAccount(newAccount);
         quickLogin(newAccount);
         return true;
     }
 
     @Override
     public AccountResponse getAccountByPhone(String phone) {
-        Account account = accountMapper.selectByPhone(phone);
+        Account account = accountRepository.queryAccountByPhone(phone);
         if (account == null) {
             throw new BusinessException(USER_NOT_EXIST);
         }

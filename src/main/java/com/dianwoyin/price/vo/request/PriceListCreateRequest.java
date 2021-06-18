@@ -11,5 +11,7 @@ import java.util.Map;
  */
 @Data
 public class PriceListCreateRequest implements Serializable {
+    
+    private String userId;
     private Map<Integer, String> propValueMap;
 }

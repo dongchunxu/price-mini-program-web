@@ -22,9 +22,9 @@ import java.util.List;
 public class CategoryPropListResponse implements Serializable {
 
     @ApiModelProperty("必填属性集合")
-    private List<CategoryPropListItem> mustProps;
+    private List<CategoryPropListItem> basicProps;
 
-    @ApiModelProperty("可选属性集合")
-    private List<CategoryPropListItem> optionalProps;
+    @ApiModelProperty("其他属性集合")
+    private List<CategoryPropListItem> otherProps;
 
 }

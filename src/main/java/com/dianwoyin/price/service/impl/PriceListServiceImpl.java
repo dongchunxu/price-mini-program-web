@@ -1,16 +1,24 @@
 package com.dianwoyin.price.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.dianwoyin.price.BusinessException;
+import com.dianwoyin.price.constants.enums.ErrorCodeEnum;
 import com.dianwoyin.price.constants.enums.PriceListStatusEnum;
+import com.dianwoyin.price.mapper.PriceListAskMapper;
+import com.dianwoyin.price.model.PriceListAsk;
+import com.dianwoyin.price.respository.PriceListRepository;
 import com.dianwoyin.price.service.CategoryPropertyService;
 import com.dianwoyin.price.service.PriceListService;
-import com.dianwoyin.price.mapper.PriceListAskMapper;
+import com.dianwoyin.price.utils.DateUtils;
 import com.dianwoyin.price.vo.request.PriceListCreateRequest;
 import com.dianwoyin.price.vo.response.PageResult;
 import com.dianwoyin.price.vo.response.price.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -22,15 +30,31 @@ import java.util.List;
  */
 @Service
 public class PriceListServiceImpl implements PriceListService {
-
+    
+    private static final int MAX_ASK_COUNT_DAILY = 10;
+    
     @Autowired
     private CategoryPropertyService categoryPropertyService;
 
     @Autowired
-    private PriceListAskMapper priceListAskMapper;
+    private PriceListRepository priceListRepository;
 
+    
     @Override
     public Boolean createPriceList(PriceListCreateRequest request) {
+        List<PriceListAsk> priceListAsks = priceListRepository.getPriceListAskByUserId(request.getUserId(),
+                DateUtils.getStartTimeOfDay(new Date(), 0), DateUtils.getEndTimeOfDay(new Date(), 0));
+        if (!CollectionUtils.isEmpty(priceListAsks)) {
+            int size = priceListAsks.size();
+            if (size > MAX_ASK_COUNT_DAILY) {
+                throw new BusinessException(ErrorCodeEnum.ERROR_SMS_CODE.getCode(), "今天您的询价过多~");
+            }
+        }
+        PriceListAsk priceListAsk = new PriceListAsk();
+        priceListAsk.setContent(JSON.toJSONString(request.getPropValueMap()));
+        priceListAsk.setCreatedBy(request.getUserId());
+        priceListAsk.setCreateTime(LocalDateTime.now());
+        priceListRepository.addPriceListAsk(priceListAsk);
         return true;
     }
 
@@ -47,7 +71,7 @@ public class PriceListServiceImpl implements PriceListService {
 
         List<String> avatarList = new ArrayList<>();
         avatarList.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fdimg.52bjw.cn%2Fimage%2Fupload%2Fcb%2F6a%2F13%2Fb3%2Fcb6a13b3fa90bdb998dbe693b3ad8846.jpg&refer=http%3A%2F%2Fdimg.52bjw.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624438821&t=81313fd79de1267c6fadc5812ca2a955");
-        
+
         PriceListListItemResponse c1 = new PriceListListItemResponse();
         c1.setPriceListId(1);
         c1.setCreateTime(new Date());

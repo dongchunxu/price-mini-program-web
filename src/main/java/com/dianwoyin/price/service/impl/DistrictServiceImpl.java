@@ -3,11 +3,12 @@ package com.dianwoyin.price.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.dianwoyin.price.mapper.DistrictDictMapper;
+import com.dianwoyin.price.model.DistrictDict;
+import com.dianwoyin.price.respository.DistrictRepository;
 import com.dianwoyin.price.service.DistrictService;
 import com.dianwoyin.price.service.RedisService;
 import com.dianwoyin.price.constants.RedisCacheKey;
-import com.dianwoyin.price.entity.DistrictDict;
-import com.dianwoyin.price.mapper.DistrictDictMapper;
 import com.dianwoyin.price.utils.HttpClientUtils;
 import com.dianwoyin.price.utils.PriceBeanUtils;
 import com.dianwoyin.price.vo.response.distirct.DistrictListResponse;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,7 +37,7 @@ public class DistrictServiceImpl implements DistrictService {
     @Autowired
     private RedisService redisService;
     @Autowired
-    private DistrictDictMapper districtDictMapper;
+    private DistrictRepository districtRepository;
 
     @Override
     public void init() {
@@ -50,7 +52,7 @@ public class DistrictServiceImpl implements DistrictService {
         if (parentId == null || parentId < 1) {
             return Collections.emptyList();
         }
-        List<DistrictDict> districtDicts = districtDictMapper.selectByParentId(parentId);
+        List<DistrictDict> districtDicts = districtRepository.selectByParent(parentId);
         return PriceBeanUtils.copyProperty(districtDicts, DistrictListResponse.class);
     }
 
@@ -62,7 +64,7 @@ public class DistrictServiceImpl implements DistrictService {
         }
 
         // 获取该级所有的行政区划
-        List<DistrictDict> districtDictList = districtDictMapper.selectByLevel(level);
+        List<DistrictDict> districtDictList = districtRepository.selectByLevel(level);
         List<DistrictListResponse> districtListRespBOList = PriceBeanUtils.copyProperty(districtDictList, DistrictListResponse.class);
 
         // 所有的行政区获取拼音，用于下面排序
@@ -104,10 +106,10 @@ public class DistrictServiceImpl implements DistrictService {
             districtDict.setAdCode(jsonObject.getString("adcode"));
             districtDict.setLevel(levelMap.get(jsonObject.getString("level")));
             districtDict.setParentId(parentId);
-            districtDict.setCreateTime(new Date());
-            districtDict.setUpdateTime(new Date());
+            districtDict.setCreateTime(LocalDateTime.now());
+            districtDict.setUpdateTime(LocalDateTime.now());
             districtDict.setDeleted(false);
-            districtDictMapper.insert(districtDict);
+            districtRepository.addDistrict(districtDict);
             loopDistrict(jsonObject.getJSONArray("districts"), districtDict.getId());
         }
     }

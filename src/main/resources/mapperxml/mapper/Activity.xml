@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dianwoyin.price.mapper.ActivityMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.dianwoyin.price.model.Activity">
+        <id column="id" property="id" />
+        <result column="activity_name" property="activityName" />
+        <result column="img_urls" property="imgUrls" />
+        <result column="price" property="price" />
+        <result column="max_join_num" property="maxJoinNum" />
+        <result column="current_join_num" property="currentJoinNum" />
+        <result column="begin_time" property="beginTime" />
+        <result column="end_time" property="endTime" />
+        <result column="deleted" property="deleted" />
+        <result column="create_id" property="createId" />
+        <result column="create_name" property="createName" />
+        <result column="update_id" property="updateId" />
+        <result column="update_name" property="updateName" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, activity_name, img_urls, price, max_join_num, current_join_num, begin_time, end_time, deleted, create_id, create_name, update_id, update_name, create_time, update_time
+    </sql>
+
+</mapper>

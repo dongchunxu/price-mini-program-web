@@ -20,6 +20,9 @@ import java.util.Date;
 @AllArgsConstructor
 @ApiModel("热门活动item")
 public class ActivityItem implements Serializable {
+    @ApiModelProperty("活动id")
+    private Integer activityId;
+
     @ApiModelProperty("活动图片")
     private String activityImgUrl;
 

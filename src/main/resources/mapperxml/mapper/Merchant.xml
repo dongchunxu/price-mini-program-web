@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dianwoyin.price.mapper.MerchantMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.dianwoyin.price.model.Merchant">
+        <id column="id" property="id" />
+        <result column="merchant_name" property="merchantName" />
+        <result column="img_url" property="imgUrl" />
+        <result column="business_type" property="businessType" />
+        <result column="status" property="status" />
+        <result column="receiver_name" property="receiverName" />
+        <result column="receiver_phone" property="receiverPhone" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="district" property="district" />
+        <result column="street" property="street" />
+        <result column="address_detail" property="addressDetail" />
+        <result column="formatted_address" property="formattedAddress" />
+        <result column="latitude" property="latitude" />
+        <result column="longitude" property="longitude" />
+        <result column="deleted" property="deleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, merchant_name, img_url, business_type, status, receiver_name, receiver_phone, province, city, district, street, address_detail, formatted_address, latitude, longitude, deleted, create_time, update_time
+    </sql>
+
+</mapper>

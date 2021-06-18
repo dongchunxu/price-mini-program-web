@@ -1,6 +1,6 @@
 package com.dianwoyin.price.utils;
 
-import com.dianwoyin.price.entity.CategoryDict;
+import com.dianwoyin.price.model.CategoryDict;
 import com.dianwoyin.price.vo.response.category.CategoryListResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;

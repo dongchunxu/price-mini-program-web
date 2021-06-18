@@ -1,31 +1,16 @@
 package com.dianwoyin.price.mapper;
 
-import com.dianwoyin.price.entity.Account;
-
-import java.util.List;
+import com.dianwoyin.price.model.Account;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @author chunxu.dong
- * @date 2020/12/21
+ * <p>
+ * 账户表 Mapper 接口
+ * </p>
+ *
+ * @author dongchunxu
+ * @since 2021-06-07
  */
-public interface AccountMapper {
-    int deleteByPrimaryKey(Integer id);
+public interface AccountMapper extends BaseMapper<Account> {
 
-    int insert(Account record);
-
-    int insertSelective(Account record);
-
-    Account selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(Account record);
-
-    int updateByPrimaryKey(Account record);
-
-    List<Account> selectAll();
-
-    Account selectByUsernameAndPassword(String username, String password);
-
-    Account selectByPhone(String phone);
-
-    Account selectByOpenId(String openId);
 }

@@ -1,21 +1,16 @@
 package com.dianwoyin.price.mapper;
 
-import com.dianwoyin.price.entity.Merchant;
+import com.dianwoyin.price.model.Merchant;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @author chunxu.dong
- * @date 2020/12/12
+ * <p>
+ * 商户信息表 Mapper 接口
+ * </p>
+ *
+ * @author dongchunxu
+ * @since 2021-06-07
  */
-public interface MerchantMapper {
-    int deleteByPrimaryKey(Integer id);
+public interface MerchantMapper extends BaseMapper<Merchant> {
 
-    int insert(Merchant record);
-
-    int insertSelective(Merchant record);
-
-    Merchant selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(Merchant record);
-
-    int updateByPrimaryKey(Merchant record);
 }
