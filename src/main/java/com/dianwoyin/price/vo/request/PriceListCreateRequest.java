@@ -1,8 +1,10 @@
 package com.dianwoyin.price.vo.request;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,7 +13,10 @@ import java.util.Map;
  */
 @Data
 public class PriceListCreateRequest implements Serializable {
-    
-    private String userId;
-    private Map<Integer, String> propValueMap;
+
+    @ApiModelProperty("类目id")
+    private Integer categoryId;
+
+    @ApiModelProperty("属性值map")
+    private Map<Integer, List<Integer>> propValueMap;
 }

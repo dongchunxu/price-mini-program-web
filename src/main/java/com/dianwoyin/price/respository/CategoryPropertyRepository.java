@@ -56,8 +56,6 @@ public class CategoryPropertyRepository {
         Map<Integer, List<CategoryPropValueResponse>> propIdToPropValueMap = propValueResponses.stream().collect(Collectors.groupingBy(CategoryPropValueResponse::getPropertyId));
         props.forEach(e-> e.setPropValues(propIdToPropValueMap.get(e.getId())));
 
-
-
 //        redisService.setObject(key, retObj);
         return CategoryPropListResponse.builder()
                 .basicProps(props.stream()

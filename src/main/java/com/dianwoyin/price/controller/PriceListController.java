@@ -31,14 +31,16 @@ public class PriceListController {
     @ApiOperation("创建报价单")
     @PostMapping("/create")
     public BizBaseResponse<Boolean> createPriceList(@Valid @RequestBody PriceListCreateRequest request) {
-        return BizBaseResponse.success(priceListService.createPriceList(request));
+        Integer userId = 12345678;
+        return BizBaseResponse.success(priceListService.createPriceList(request, userId));
     }
 
     @ApiOperation("报价单列表")
     @GetMapping("/get-price-list-list")
     public BizPageResponse<PriceListListItemResponse> getPriceListList(@ApiParam("报价单状态, 1进行中，2已完成，3已终止") @RequestParam(required = false) Integer priceListStatus
             ,@RequestParam("page") Integer page, @RequestParam("pageSize") Integer pageSize) {
-        return BizPageResponse.success(priceListService.getPriceListList(priceListStatus, page, pageSize));
+        Integer userId = 12345678;
+        return BizPageResponse.success(priceListService.getPriceListList(userId, priceListStatus, page, pageSize));
     }
 
     @ApiOperation("采纳报价")

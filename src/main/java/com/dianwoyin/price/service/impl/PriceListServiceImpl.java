@@ -1,10 +1,11 @@
 package com.dianwoyin.price.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.dianwoyin.price.BusinessException;
 import com.dianwoyin.price.constants.enums.ErrorCodeEnum;
 import com.dianwoyin.price.constants.enums.PriceListStatusEnum;
-import com.dianwoyin.price.mapper.PriceListAskMapper;
 import com.dianwoyin.price.model.PriceListAsk;
 import com.dianwoyin.price.respository.PriceListRepository;
 import com.dianwoyin.price.service.CategoryPropertyService;
@@ -12,6 +13,9 @@ import com.dianwoyin.price.service.PriceListService;
 import com.dianwoyin.price.utils.DateUtils;
 import com.dianwoyin.price.vo.request.PriceListCreateRequest;
 import com.dianwoyin.price.vo.response.PageResult;
+import com.dianwoyin.price.vo.response.category.CategoryPropListItem;
+import com.dianwoyin.price.vo.response.category.CategoryPropListResponse;
+import com.dianwoyin.price.vo.response.category.CategoryPropValueResponse;
 import com.dianwoyin.price.vo.response.price.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +23,12 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author chunxu.dong
@@ -39,10 +45,9 @@ public class PriceListServiceImpl implements PriceListService {
     @Autowired
     private PriceListRepository priceListRepository;
 
-    
     @Override
-    public Boolean createPriceList(PriceListCreateRequest request) {
-        List<PriceListAsk> priceListAsks = priceListRepository.getPriceListAskByUserId(request.getUserId(),
+    public Boolean createPriceList(PriceListCreateRequest request, Integer userId) {
+        List<PriceListAsk> priceListAsks = priceListRepository.getPriceListAskByUserIdAndCreatedTime(userId,
                 DateUtils.getStartTimeOfDay(new Date(), 0), DateUtils.getEndTimeOfDay(new Date(), 0));
         if (!CollectionUtils.isEmpty(priceListAsks)) {
             int size = priceListAsks.size();
@@ -50,47 +55,73 @@ public class PriceListServiceImpl implements PriceListService {
                 throw new BusinessException(ErrorCodeEnum.ERROR_SMS_CODE.getCode(), "今天您的询价过多~");
             }
         }
+
+
         PriceListAsk priceListAsk = new PriceListAsk();
+        priceListAsk.setName("");
+        priceListAsk.setCategoryId(request.getCategoryId());
+        priceListAsk.setCreatedId(userId);
+        priceListAsk.setDeleted(false);
+        priceListAsk.setStatus(PriceListStatusEnum.Going.getCode());
         priceListAsk.setContent(JSON.toJSONString(request.getPropValueMap()));
-        priceListAsk.setCreatedBy(request.getUserId());
+        priceListAsk.setCreatedBy(userId+"");
         priceListAsk.setCreateTime(LocalDateTime.now());
         priceListRepository.addPriceListAsk(priceListAsk);
         return true;
     }
 
     @Override
-    public PageResult<PriceListListItemResponse> getPriceListList(Integer priceListStatus, Integer page, Integer pageSize) {
-        // mock 空数据
-        if (priceListStatus == 2) {
-            return PageResult.of(Collections.emptyList(), page, pageSize, 0);
+    public PageResult<PriceListListItemResponse> getPriceListList(Integer userId, Integer priceListStatus, Integer page, Integer pageSize) {
+        PageResult<PriceListAsk> pageResult = priceListRepository.getPriceListAskByUserIdPage(userId, priceListStatus, page, pageSize);
+
+        List<PriceListListItemResponse> itemResponses = new ArrayList<>();
+        List<PriceListAsk> results = pageResult.getResults();
+
+        if (CollectionUtils.isEmpty(results)) {
+            return PageResult.of(itemResponses, page, pageSize, pageResult.getTotal());
         }
 
-        Integer total = 2;
+        List<PriceListListItemResponse> collect = results.stream()
+                .map(e -> {
+                    // 报价单内容,json格式
+                    JSONObject contentJson = JSON.parseObject(e.getContent());
 
-        List<PriceListListItemResponse> dataList = new ArrayList<>();
+                    // 解析报价单列表item标题
+                    StringBuilder goodsName = new StringBuilder("");
+                    CategoryPropListResponse categoryPropListResp =
+                            categoryPropertyService.getPropertyListByCategoryId(e.getCategoryId());
+                    List<CategoryPropListItem> basicProps = categoryPropListResp.getBasicProps();
+                    basicProps.forEach(p->{
+                        if (contentJson.containsKey(p.getId()+"")) {
+                            JSONArray propValueJsonArr = contentJson.getJSONArray(p.getId() + "");
+                            if (propValueJsonArr != null && propValueJsonArr.size() > 0) {
+                                for (int i = 0; i < propValueJsonArr.size(); i++) {
+                                    List<CategoryPropValueResponse> propValues = p.getPropValues();
+                                    if (!CollectionUtils.isEmpty(propValues)) {
+                                        for (CategoryPropValueResponse pv : propValues) {
+                                            if (((Integer)propValueJsonArr.get(i)).equals(pv.getId())) {
+                                                goodsName.append(pv.getPropertyValueName());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
-        List<String> avatarList = new ArrayList<>();
-        avatarList.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fdimg.52bjw.cn%2Fimage%2Fupload%2Fcb%2F6a%2F13%2Fb3%2Fcb6a13b3fa90bdb998dbe693b3ad8846.jpg&refer=http%3A%2F%2Fdimg.52bjw.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624438821&t=81313fd79de1267c6fadc5812ca2a955");
+                        }
+                    });
 
-        PriceListListItemResponse c1 = new PriceListListItemResponse();
-        c1.setPriceListId(1);
-        c1.setCreateTime(new Date());
-        c1.setGoodsImgUrl("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fdimg.52bjw.cn%2Fimage%2Fupload%2Fcb%2F6a%2F13%2Fb3%2Fcb6a13b3fa90bdb998dbe693b3ad8846.jpg&refer=http%3A%2F%2Fdimg.52bjw.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624438821&t=81313fd79de1267c6fadc5812ca2a955");
-        c1.setPriceListStatus(priceListStatus);
-        c1.setPayAmount(BigDecimal.valueOf(12,2));
-        c1.setGoodsName("不干胶cccc");
-        c1.setSupplierAvatars(avatarList);
-        dataList.add(c1);
-
-        PriceListListItemResponse c2 = new PriceListListItemResponse();
-        c2.setPriceListId(2);
-        c2.setCreateTime(new Date());
-        c2.setGoodsImgUrl("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fdimg.52bjw.cn%2Fimage%2Fupload%2Fcb%2F6a%2F13%2Fb3%2Fcb6a13b3fa90bdb998dbe693b3ad8846.jpg&refer=http%3A%2F%2Fdimg.52bjw.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624438821&t=81313fd79de1267c6fadc5812ca2a955");
-        c2.setPriceListStatus(priceListStatus);
-        c2.setPayAmount(BigDecimal.valueOf(12,2));
-        c2.setGoodsName("不干胶cccc22222");
-        dataList.add(c2);
-        return PageResult.of(dataList, page, pageSize, total);
+                    return PriceListListItemResponse.builder()
+                            .priceListStatus(e.getStatus())
+                            .priceListId(e.getId())
+                            .createTime(Date.from(e.getCreateTime().atZone(ZoneId.systemDefault()).toInstant()))
+                            .goodsImgUrl("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fdimg.52bjw.cn%2Fimage%2Fupload%2Fcb%2F6a%2F13%2Fb3%2Fcb6a13b3fa90bdb998dbe693b3ad8846.jpg&refer=http%3A%2F%2Fdimg.52bjw.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624438821&t=81313fd79de1267c6fadc5812ca2a955")
+                            .goodsName(goodsName.toString())
+                            .payAmount(BigDecimal.valueOf(12, 2))
+                            .build();
+                })
+                .collect(Collectors.toList());
+        itemResponses.addAll(collect);
+        return PageResult.of(itemResponses, page, pageSize, pageResult.getTotal());
     }
 
     @Override

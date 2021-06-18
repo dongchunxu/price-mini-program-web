@@ -11,9 +11,9 @@ import com.dianwoyin.price.vo.response.price.PriceListListItemResponse;
  */
 public interface PriceListService {
 
-    Boolean createPriceList(PriceListCreateRequest request);
+    Boolean createPriceList(PriceListCreateRequest request, Integer userId);
 
-    PageResult<PriceListListItemResponse> getPriceListList(Integer priceListStatus, Integer page, Integer pageSize);
+    PageResult<PriceListListItemResponse> getPriceListList(Integer userId, Integer priceListStatus, Integer page, Integer pageSize);
 
     PriceListDetailResponse getPriceListDetail(Integer priceListId);
 

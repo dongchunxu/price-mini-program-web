@@ -16,4 +16,5 @@ public interface CategoryPropertyService {
     CategoryPropListResponse getPropertyListByCategoryId(Integer categoryId);
 
 
+
 }

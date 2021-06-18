@@ -3,6 +3,7 @@ package com.dianwoyin.price.vo.response.price;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
@@ -17,6 +18,7 @@ import java.util.List;
  */
 @ApiModel("报价单列表item")
 @Data
+@Builder
 public class PriceListListItemResponse implements Serializable {
     @ApiModelProperty("报价单id")
     private Integer priceListId;
