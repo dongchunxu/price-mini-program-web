@@ -40,6 +40,8 @@ public class PriceListController {
     public BizPageResponse<PriceListListItemResponse> getPriceListList(@ApiParam("报价单状态, 1进行中，2已完成，3已终止") @RequestParam(required = false) Integer priceListStatus
             ,@RequestParam("page") Integer page, @RequestParam("pageSize") Integer pageSize) {
         Integer userId = 12345678;
+
+        priceListStatus = priceListStatus != 0 ? priceListStatus: null;
         return BizPageResponse.success(priceListService.getPriceListList(userId, priceListStatus, page, pageSize));
     }
 

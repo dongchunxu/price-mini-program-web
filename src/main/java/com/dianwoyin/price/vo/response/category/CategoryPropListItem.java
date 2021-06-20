@@ -29,8 +29,11 @@ public class CategoryPropListItem implements Serializable {
     @ApiModelProperty("类目id")
     private Integer categoryId;
 
-    @ApiModelProperty("控件类型: 0：输入框，1：单选框，2：复选框")
+    @ApiModelProperty("控件类型: 0：输入框，1：下拉框，2：复选框, 3单选按钮，4text")
     private Integer inputType;
+
+    @ApiModelProperty("是否必填，true必填")
+    private Boolean must;
 
     @ApiModelProperty("属性值集合")
     private List<CategoryPropValueResponse> propValues;
