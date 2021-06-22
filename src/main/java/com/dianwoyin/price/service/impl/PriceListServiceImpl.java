@@ -21,18 +21,17 @@ import com.dianwoyin.price.vo.response.category.CategoryPropListItem;
 import com.dianwoyin.price.vo.response.category.CategoryPropListResponse;
 import com.dianwoyin.price.vo.response.category.CategoryPropValueResponse;
 import com.dianwoyin.price.vo.response.price.*;
+import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -97,79 +96,11 @@ public class PriceListServiceImpl implements PriceListService {
                 .map(e -> {
                     // 标题
                     StringBuilder goodsName = new StringBuilder();
-
-                    CategoryPropListResponse categoryPropListResp = categoryPropertyService.getPropertyListByCategoryId(e.getCategoryId());
-                    List<CategoryPropListItem> basicPropsDict = categoryPropListResp.getBasicProps();
-                    List<CategoryPropListItem> otherPropsDict = categoryPropListResp.getOtherProps();
-
-                    Map<Integer, List<CategoryPropListItem>> basicPropValueMap
-                            = basicPropsDict.stream().collect(Collectors.groupingBy(CategoryPropListItem::getId));
-                    Map<Integer, List<CategoryPropListItem>> otherPropValueMap
-                            = otherPropsDict.stream().collect(Collectors.groupingBy(CategoryPropListItem::getId));
-
-                    PropValueCreateRequest propValueCreateRequest = JSON.parseObject(e.getContent(), PropValueCreateRequest.class);
-                    final List<PropValueCreateRequest.Prop> basicProps1 = propValueCreateRequest.getBasicProps();
-                    final List<PropValueCreateRequest.Prop> otherProps = propValueCreateRequest.getOtherProps();
-
-                    if (!CollectionUtils.isEmpty(basicProps1)) {
-                       for (PropValueCreateRequest.Prop prop: basicProps1) {
-                           Integer propId = prop.getId();
-                           Object value = prop.getValue();
-                           JSONArray jsonArray = JSON.parseArray(JSON.toJSONString(value));
-                           for (int i = 0; i < jsonArray.size(); i++) {
-                               List<CategoryPropListItem> categoryPropListItems = basicPropValueMap.get(propId);
-                               if (!CollectionUtils.isEmpty(categoryPropListItems)) {
-                                   CategoryPropListItem categoryPropListItem = categoryPropListItems.get(0);
-                                   List<CategoryPropValueResponse> propValues = categoryPropListItem.getPropValues();
-
-                                   Object o = jsonArray.get(i);
-                                   if (!CollectionUtils.isEmpty(propValues)) {
-                                       if (o instanceof Integer) {
-                                           if ("数量".equals(categoryPropListItem.getPropertyName())) {
-                                               goodsName.append(o).append("/");
-                                           } else {
-                                               propValues.forEach(f->{
-                                                   if (f.getId().equals(o)) {
-                                                       goodsName.append(f.getPropertyValueName()).append("/");
-                                                   }
-                                               });
-                                           }
-                                       } else {
-                                           goodsName.append(o).append("/");
-                                       }
-                                   }
-                               }
-                           }
-                       }
+                    Map<String, String> propValueMap = parsePropValue(e.getCategoryId(), e.getContent());
+                    List<String> propValues = propValueMap.values().stream().collect(Collectors.toList());
+                    for (String propValue : propValues) {
+                        goodsName.append(propValue).append("/");
                     }
-                    if (!CollectionUtils.isEmpty(otherProps)) {
-                        for (PropValueCreateRequest.Prop prop: otherProps) {
-                            Integer propId = prop.getId();
-                            Object value = prop.getValue();
-                            JSONArray jsonArray = JSON.parseArray(JSON.toJSONString(value));
-                            for (int i = 0; i < jsonArray.size(); i++) {
-                                List<CategoryPropListItem> categoryPropListItems = otherPropValueMap.get(propId);
-                                if (!CollectionUtils.isEmpty(categoryPropListItems)) {
-                                    CategoryPropListItem categoryPropListItem = categoryPropListItems.get(0);
-                                    List<CategoryPropValueResponse> propValues = categoryPropListItem.getPropValues();
-
-                                    Object o = jsonArray.get(i);
-                                    if (!CollectionUtils.isEmpty(propValues)) {
-                                        if (o instanceof Integer) {
-                                            propValues.forEach(f->{
-                                                if (f.getId().equals(o)) {
-                                                    goodsName.append(f.getPropertyValueName());
-                                                }
-                                            });
-                                        } else {
-                                            goodsName.append(o);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
                     String imgUrl = "";
                     List<CategoryListResponse> categoryListResponses = categoryMap.get(e.getCategoryId());
                     if (!CollectionUtils.isEmpty(categoryListResponses)) {
@@ -190,15 +121,99 @@ public class PriceListServiceImpl implements PriceListService {
         return PageResult.of(itemResponses, page, pageSize, pageResult.getTotal());
     }
 
+    private Map<String, String> parsePropValue(Integer categoryId, String content) {
+        Map<String, String> resultMap = new HashMap<>();
+
+        CategoryPropListResponse categoryPropListResp = categoryPropertyService.getPropertyListByCategoryId(categoryId);
+        List<CategoryPropListItem> basicPropsDict = categoryPropListResp.getBasicProps();
+        List<CategoryPropListItem> otherPropsDict = categoryPropListResp.getOtherProps();
+
+        Map<Integer, List<CategoryPropListItem>> basicPropValueMap
+                = basicPropsDict.stream().collect(Collectors.groupingBy(CategoryPropListItem::getId));
+        Map<Integer, List<CategoryPropListItem>> otherPropValueMap
+                = otherPropsDict.stream().collect(Collectors.groupingBy(CategoryPropListItem::getId));
+
+        PropValueCreateRequest propValueCreateRequest = JSON.parseObject(content, PropValueCreateRequest.class);
+        final List<PropValueCreateRequest.Prop> basicProps1 = propValueCreateRequest.getBasicProps();
+        final List<PropValueCreateRequest.Prop> otherProps = propValueCreateRequest.getOtherProps();
+
+        if (!CollectionUtils.isEmpty(basicProps1)) {
+           for (PropValueCreateRequest.Prop prop: basicProps1) {
+               Integer propId = prop.getId();
+               Object value = prop.getValue();
+               JSONArray jsonArray = JSON.parseArray(JSON.toJSONString(value));
+               for (int i = 0; i < jsonArray.size(); i++) {
+                   List<CategoryPropListItem> categoryPropListItems = basicPropValueMap.get(propId);
+                   if (!CollectionUtils.isEmpty(categoryPropListItems)) {
+                       CategoryPropListItem categoryPropListItem = categoryPropListItems.get(0);
+                       List<CategoryPropValueResponse> propValues = categoryPropListItem.getPropValues();
+
+                       Object o = jsonArray.get(i);
+                       if (!CollectionUtils.isEmpty(propValues)) {
+                           if (o instanceof Integer) {
+                               if ("数量".equals(categoryPropListItem.getPropertyName())) {
+                                   resultMap.put("数量", (String) o);
+                               } else {
+                                   propValues.forEach(f->{
+                                       if (f.getId().equals(o)) {
+                                           resultMap.put(categoryPropListItem.getPropertyName(), f.getPropertyValueName());
+                                       }
+                                   });
+                               }
+                           } else {
+                               resultMap.put(categoryPropListItem.getPropertyName(), (String) o);
+                           }
+                       }
+                   }
+               }
+           }
+        }
+        if (!CollectionUtils.isEmpty(otherProps)) {
+            for (PropValueCreateRequest.Prop prop: otherProps) {
+                Integer propId = prop.getId();
+                Object value = prop.getValue();
+                JSONArray jsonArray = JSON.parseArray(JSON.toJSONString(value));
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    List<CategoryPropListItem> categoryPropListItems = otherPropValueMap.get(propId);
+                    if (!CollectionUtils.isEmpty(categoryPropListItems)) {
+                        CategoryPropListItem categoryPropListItem = categoryPropListItems.get(0);
+                        List<CategoryPropValueResponse> propValues = categoryPropListItem.getPropValues();
+
+                        Object o = jsonArray.get(i);
+                        if (!CollectionUtils.isEmpty(propValues)) {
+                            if (o instanceof Integer) {
+                                propValues.forEach(f->{
+                                    if (f.getId().equals(o)) {
+                                        resultMap.put(categoryPropListItem.getPropertyName(), f.getPropertyValueName());
+                                    }
+                                });
+                            } else {
+                                resultMap.put(categoryPropListItem.getPropertyName(), (String) o);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return resultMap;
+    }
+
     @Override
     public PriceListDetailResponse getPriceListDetail(Integer priceListId) {
-        GoodsDetail goodsDetail = new GoodsDetail();
+        PriceListAsk priceListAsk = priceListRepository.getPriceListAsk(priceListId);
+
+        if (priceListAsk == null) {
+            throw new BusinessException(ErrorCodeEnum.ERROR_COMMON_PARAM.getCode(), "报价单不存在哦~");
+        }
+        // 属性
+        Map<String, String> propValueMap = parsePropValue(priceListAsk.getCategoryId(), priceListAsk.getContent());
         List<SimplePropPair> props = new ArrayList<>();
-        props.add(new SimplePropPair("材料", "尼龙"));
-        props.add(new SimplePropPair("尺寸", "10&12正开"));
-        props.add(new SimplePropPair("数量", "1000"));
-        props.add(new SimplePropPair("印面", "单面"));
-        props.add(new SimplePropPair("工艺", "双面亮膜"));
+        propValueMap.forEach((propName, propValueName)->{
+            props.add(new SimplePropPair(propName, propValueName));
+        });
+
+        GoodsDetail goodsDetail = new GoodsDetail();
         goodsDetail.setPropValues(props);
         goodsDetail.setComment("今天一定要送到哦！");
 

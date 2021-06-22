@@ -14,6 +14,7 @@ import com.dianwoyin.price.vo.response.PageResult;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.convert.EntityWriter;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
@@ -101,5 +102,11 @@ public class PriceListRepository {
     public Boolean stopPrice(Integer priceListId, Integer operator) {
         updatePriceListStatus(priceListId, operator, PriceListStatusEnum.Stopped);
         return true;
+    }
+
+    public PriceListAsk getPriceListAsk(Integer priceListId) {
+        QueryWrapper<PriceListAsk> askQueryWrapper = new QueryWrapper<>();
+        askQueryWrapper.eq("id", priceListId).eq("deleted", 0);
+        return priceListAskMapper.selectOne(askQueryWrapper);
     }
 }
