@@ -18,5 +18,7 @@ public class PriceListCreateRequest implements Serializable {
     private Integer categoryId;
 
     @ApiModelProperty("属性值map")
-    private Map<Integer, List<Integer>> propValueMap;
+    private PropValueCreateRequest propValueMap;
+
+
 }

@@ -17,5 +17,7 @@ public interface PriceListService {
 
     PriceListDetailResponse getPriceListDetail(Integer priceListId);
 
-    Boolean confirmPrice(Integer priceListId, Integer priceListReplyId, String operator);
+    Boolean confirmPrice(Integer priceListId, Integer priceListReplyId, Integer operator);
+
+    Boolean stopPrice(Integer priceListId, Integer operator);
 }

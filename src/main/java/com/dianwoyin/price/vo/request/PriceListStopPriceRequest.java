@@ -9,11 +9,8 @@ import javax.validation.constraints.NotNull;
  * @date 2021/2/20
  */
 @Data
-public class PriceListConfirmPriceRequest {
+public class PriceListStopPriceRequest {
 
     @NotNull(message = "询价id不能为空")
     private Integer priceListId;
-
-    @NotNull(message = "报价id不能为空")
-    private Integer priceListReplyId;
 }

@@ -52,6 +52,17 @@ public class CategoryServiceImpl implements CategoryService {
         return ret;
     }
 
+    @Override
+    public List<CategoryListResponse> getLeafCategoryList() {
+        List<CategoryDict> categoryDictList = categoryRepository.queryAllCategory();
+        if (CollectionUtils.isEmpty(categoryDictList)) {
+            return Collections.emptyList();
+        }
+        categoryDictList = categoryDictList.stream().filter(CategoryDict::getLeaf).collect(Collectors.toList());
+        List<CategoryListResponse> categoryDictResponseList = ConvertUtils.convert(categoryDictList);
+        return categoryDictResponseList;
+    }
+
 
     private void findChild(List<CategoryListResponse> allCategory, CategoryListResponse curr) {
         if (CollectionUtils.isEmpty(allCategory)) {

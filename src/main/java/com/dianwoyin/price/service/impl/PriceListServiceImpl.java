@@ -7,16 +7,21 @@ import com.dianwoyin.price.BusinessException;
 import com.dianwoyin.price.constants.enums.ErrorCodeEnum;
 import com.dianwoyin.price.constants.enums.PriceListStatusEnum;
 import com.dianwoyin.price.model.PriceListAsk;
+import com.dianwoyin.price.respository.CategoryPropertyRepository;
 import com.dianwoyin.price.respository.PriceListRepository;
 import com.dianwoyin.price.service.CategoryPropertyService;
+import com.dianwoyin.price.service.CategoryService;
 import com.dianwoyin.price.service.PriceListService;
 import com.dianwoyin.price.utils.DateUtils;
 import com.dianwoyin.price.vo.request.PriceListCreateRequest;
+import com.dianwoyin.price.vo.request.PropValueCreateRequest;
 import com.dianwoyin.price.vo.response.PageResult;
+import com.dianwoyin.price.vo.response.category.CategoryListResponse;
 import com.dianwoyin.price.vo.response.category.CategoryPropListItem;
 import com.dianwoyin.price.vo.response.category.CategoryPropListResponse;
 import com.dianwoyin.price.vo.response.category.CategoryPropValueResponse;
 import com.dianwoyin.price.vo.response.price.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -25,9 +30,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +40,7 @@ import java.util.stream.Collectors;
  * @date 2020/12/29
  */
 @Service
+@Slf4j
 public class PriceListServiceImpl implements PriceListService {
     
     private static final int MAX_ASK_COUNT_DAILY = 10;
@@ -43,19 +49,21 @@ public class PriceListServiceImpl implements PriceListService {
     private CategoryPropertyService categoryPropertyService;
 
     @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
     private PriceListRepository priceListRepository;
 
     @Override
     public Boolean createPriceList(PriceListCreateRequest request, Integer userId) {
+        log.info("createPriceList.request: {}, userId: {}", request, userId);
+
+
         List<PriceListAsk> priceListAsks = priceListRepository.getPriceListAskByUserIdAndCreatedTime(userId,
                 DateUtils.getStartTimeOfDay(new Date(), 0), DateUtils.getEndTimeOfDay(new Date(), 0));
-        if (!CollectionUtils.isEmpty(priceListAsks)) {
-            int size = priceListAsks.size();
-            if (size > MAX_ASK_COUNT_DAILY) {
-                throw new BusinessException(ErrorCodeEnum.ERROR_SMS_CODE.getCode(), "今天您的询价过多~");
-            }
+        if (!CollectionUtils.isEmpty(priceListAsks) && priceListAsks.size() > MAX_ASK_COUNT_DAILY) {
+            throw new BusinessException(ErrorCodeEnum.ERROR_SMS_CODE.getCode(), "今天您的询价过多~");
         }
-
 
         PriceListAsk priceListAsk = new PriceListAsk();
         priceListAsk.setName("");
@@ -67,11 +75,13 @@ public class PriceListServiceImpl implements PriceListService {
         priceListAsk.setCreatedBy(userId+"");
         priceListAsk.setCreateTime(LocalDateTime.now());
         priceListRepository.addPriceListAsk(priceListAsk);
+
         return true;
     }
 
     @Override
     public PageResult<PriceListListItemResponse> getPriceListList(Integer userId, Integer priceListStatus, Integer page, Integer pageSize) {
+        log.info("getPriceListList.userId: {}, priceListStatus: {}, page: {}, pageSize: {}", userId, priceListStatus, page, pageSize);
         PageResult<PriceListAsk> pageResult = priceListRepository.getPriceListAskByUserIdPage(userId, priceListStatus, page, pageSize);
 
         List<PriceListListItemResponse> itemResponses = new ArrayList<>();
@@ -81,46 +91,102 @@ public class PriceListServiceImpl implements PriceListService {
             return PageResult.of(itemResponses, page, pageSize, pageResult.getTotal());
         }
 
+        List<CategoryListResponse> allCategoryList = categoryService.getLeafCategoryList();
+        Map<Integer, List<CategoryListResponse>> categoryMap = allCategoryList.stream().collect(Collectors.groupingBy(CategoryListResponse::getId));
         List<PriceListListItemResponse> collect = results.stream()
                 .map(e -> {
-                    // 报价单内容,json格式
-                    JSONObject contentJson = JSON.parseObject(e.getContent());
+                    // 标题
+                    StringBuilder goodsName = new StringBuilder();
 
-                    // 解析报价单列表item标题
-                    StringBuilder goodsName = new StringBuilder("");
-                    CategoryPropListResponse categoryPropListResp =
-                            categoryPropertyService.getPropertyListByCategoryId(e.getCategoryId());
-                    List<CategoryPropListItem> basicProps = categoryPropListResp.getBasicProps();
-                    basicProps.forEach(p->{
-                        if (contentJson.containsKey(p.getId()+"")) {
-                            JSONArray propValueJsonArr = contentJson.getJSONArray(p.getId() + "");
-                            if (propValueJsonArr != null && propValueJsonArr.size() > 0) {
-                                for (int i = 0; i < propValueJsonArr.size(); i++) {
-                                    List<CategoryPropValueResponse> propValues = p.getPropValues();
+                    CategoryPropListResponse categoryPropListResp = categoryPropertyService.getPropertyListByCategoryId(e.getCategoryId());
+                    List<CategoryPropListItem> basicPropsDict = categoryPropListResp.getBasicProps();
+                    List<CategoryPropListItem> otherPropsDict = categoryPropListResp.getOtherProps();
+
+                    Map<Integer, List<CategoryPropListItem>> basicPropValueMap
+                            = basicPropsDict.stream().collect(Collectors.groupingBy(CategoryPropListItem::getId));
+                    Map<Integer, List<CategoryPropListItem>> otherPropValueMap
+                            = otherPropsDict.stream().collect(Collectors.groupingBy(CategoryPropListItem::getId));
+
+                    PropValueCreateRequest propValueCreateRequest = JSON.parseObject(e.getContent(), PropValueCreateRequest.class);
+                    final List<PropValueCreateRequest.Prop> basicProps1 = propValueCreateRequest.getBasicProps();
+                    final List<PropValueCreateRequest.Prop> otherProps = propValueCreateRequest.getOtherProps();
+
+                    if (!CollectionUtils.isEmpty(basicProps1)) {
+                       for (PropValueCreateRequest.Prop prop: basicProps1) {
+                           Integer propId = prop.getId();
+                           Object value = prop.getValue();
+                           JSONArray jsonArray = JSON.parseArray(JSON.toJSONString(value));
+                           for (int i = 0; i < jsonArray.size(); i++) {
+                               List<CategoryPropListItem> categoryPropListItems = basicPropValueMap.get(propId);
+                               if (!CollectionUtils.isEmpty(categoryPropListItems)) {
+                                   CategoryPropListItem categoryPropListItem = categoryPropListItems.get(0);
+                                   List<CategoryPropValueResponse> propValues = categoryPropListItem.getPropValues();
+
+                                   Object o = jsonArray.get(i);
+                                   if (!CollectionUtils.isEmpty(propValues)) {
+                                       if (o instanceof Integer) {
+                                           if ("数量".equals(categoryPropListItem.getPropertyName())) {
+                                               goodsName.append(o).append("/");
+                                           } else {
+                                               propValues.forEach(f->{
+                                                   if (f.getId().equals(o)) {
+                                                       goodsName.append(f.getPropertyValueName()).append("/");
+                                                   }
+                                               });
+                                           }
+                                       } else {
+                                           goodsName.append(o).append("/");
+                                       }
+                                   }
+                               }
+                           }
+                       }
+                    }
+                    if (!CollectionUtils.isEmpty(otherProps)) {
+                        for (PropValueCreateRequest.Prop prop: otherProps) {
+                            Integer propId = prop.getId();
+                            Object value = prop.getValue();
+                            JSONArray jsonArray = JSON.parseArray(JSON.toJSONString(value));
+                            for (int i = 0; i < jsonArray.size(); i++) {
+                                List<CategoryPropListItem> categoryPropListItems = otherPropValueMap.get(propId);
+                                if (!CollectionUtils.isEmpty(categoryPropListItems)) {
+                                    CategoryPropListItem categoryPropListItem = categoryPropListItems.get(0);
+                                    List<CategoryPropValueResponse> propValues = categoryPropListItem.getPropValues();
+
+                                    Object o = jsonArray.get(i);
                                     if (!CollectionUtils.isEmpty(propValues)) {
-                                        for (CategoryPropValueResponse pv : propValues) {
-                                            if (((Integer)propValueJsonArr.get(i)).equals(pv.getId())) {
-                                                goodsName.append(pv.getPropertyValueName());
-                                            }
+                                        if (o instanceof Integer) {
+                                            propValues.forEach(f->{
+                                                if (f.getId().equals(o)) {
+                                                    goodsName.append(f.getPropertyValueName());
+                                                }
+                                            });
+                                        } else {
+                                            goodsName.append(o);
                                         }
                                     }
                                 }
                             }
-
                         }
-                    });
+                    }
 
+                    String imgUrl = "";
+                    List<CategoryListResponse> categoryListResponses = categoryMap.get(e.getCategoryId());
+                    if (!CollectionUtils.isEmpty(categoryListResponses)) {
+                        imgUrl = categoryListResponses.get(0).getImgUrl();
+                    }
                     return PriceListListItemResponse.builder()
                             .priceListStatus(e.getStatus())
                             .priceListId(e.getId())
                             .createTime(Date.from(e.getCreateTime().atZone(ZoneId.systemDefault()).toInstant()))
-                            .goodsImgUrl("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fdimg.52bjw.cn%2Fimage%2Fupload%2Fcb%2F6a%2F13%2Fb3%2Fcb6a13b3fa90bdb998dbe693b3ad8846.jpg&refer=http%3A%2F%2Fdimg.52bjw.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624438821&t=81313fd79de1267c6fadc5812ca2a955")
+                            .goodsImgUrl(imgUrl)
                             .goodsName(goodsName.toString())
                             .payAmount(BigDecimal.valueOf(12, 2))
                             .build();
                 })
                 .collect(Collectors.toList());
         itemResponses.addAll(collect);
+
         return PageResult.of(itemResponses, page, pageSize, pageResult.getTotal());
     }
 
@@ -173,7 +239,12 @@ public class PriceListServiceImpl implements PriceListService {
     }
 
     @Override
-    public Boolean confirmPrice(Integer priceListId, Integer priceListReplyId, String operator) {
-        return true;
+    public Boolean confirmPrice(Integer priceListId, Integer priceListReplyId, Integer operator) {
+        return priceListRepository.confirmPrice(priceListId, priceListReplyId, operator);
+    }
+
+    @Override
+    public Boolean stopPrice(Integer priceListId, Integer operator) {
+        return priceListRepository.stopPrice(priceListId, operator);
     }
 }

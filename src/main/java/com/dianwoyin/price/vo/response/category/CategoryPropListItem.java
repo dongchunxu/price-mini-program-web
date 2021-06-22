@@ -35,6 +35,9 @@ public class CategoryPropListItem implements Serializable {
     @ApiModelProperty("是否必填，true必填")
     private Boolean must;
 
+    @ApiModelProperty("排序用")
+    private Integer seq;
+
     @ApiModelProperty("属性值集合")
     private List<CategoryPropValueResponse> propValues;
 }

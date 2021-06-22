@@ -1,5 +1,6 @@
 package com.dianwoyin.price.service;
 
+import com.dianwoyin.price.vo.response.category.CategoryListResponse;
 import com.dianwoyin.price.vo.response.category.CategoryPropListResponse;
 
 /**
@@ -14,7 +15,6 @@ public interface CategoryPropertyService {
      * @return
      */
     CategoryPropListResponse getPropertyListByCategoryId(Integer categoryId);
-
 
 
 }

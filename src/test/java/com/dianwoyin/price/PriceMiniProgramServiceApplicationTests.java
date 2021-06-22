@@ -29,7 +29,7 @@
 //        // 全局配置
 //        GlobalConfig gc = new GlobalConfig();
 //        gc.setOutputDir(rb.getString("OutputDir"));
-//        gc.setOpen(false);
+//        gc.setOpen(false);PriceListServiceImpl.java
 //        gc.setBaseResultMap(true);
 //        gc.setBaseColumnList(true);
 //        gc.setAuthor(rb.getString("author"));

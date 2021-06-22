@@ -16,4 +16,6 @@ public interface CategoryService {
      */
     List<CategoryListResponse> getAllCategoryList();
 
+    List<CategoryListResponse> getLeafCategoryList();
+
 }

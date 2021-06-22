@@ -37,7 +37,7 @@ public class CategoryPropertyRepository {
 //        }
         // 查询类目下的所有属性
         QueryWrapper<CategoryProperty> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("category_id", categoryId);
+        queryWrapper.eq("category_id", categoryId).orderByAsc("seq");
         List<CategoryProperty> categoryProps = categoryPropertyMapper.selectList(queryWrapper);
         List<CategoryPropListItem> props = PriceBeanUtils.copyProperty(categoryProps, CategoryPropListItem.class);
         if (CollectionUtils.isEmpty(props)) {

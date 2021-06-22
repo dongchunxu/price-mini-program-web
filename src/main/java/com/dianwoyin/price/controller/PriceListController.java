@@ -5,6 +5,7 @@ import com.dianwoyin.price.vo.BizBaseResponse;
 import com.dianwoyin.price.vo.BizPageResponse;
 import com.dianwoyin.price.vo.request.PriceListConfirmPriceRequest;
 import com.dianwoyin.price.vo.request.PriceListCreateRequest;
+import com.dianwoyin.price.vo.request.PriceListStopPriceRequest;
 import com.dianwoyin.price.vo.response.price.PriceListDetailResponse;
 import com.dianwoyin.price.vo.response.price.PriceListListItemResponse;
 import io.swagger.annotations.Api;
@@ -48,10 +49,16 @@ public class PriceListController {
     @ApiOperation("采纳报价")
     @PostMapping("/confirm-price")
     public BizBaseResponse<Boolean> confirmPrice(@Valid @RequestBody PriceListConfirmPriceRequest confirmRequest) {
-        Integer priceListId = null;
-        Integer priceListReplyId = null;
-        String operator = null;
-        return BizBaseResponse.success(priceListService.confirmPrice(priceListId, priceListReplyId, operator));
+        Integer userId = null;
+        return BizBaseResponse.success(priceListService.confirmPrice(
+                confirmRequest.getPriceListId(), confirmRequest.getPriceListReplyId(), userId));
+    }
+
+    @ApiOperation("停止报价")
+    @PostMapping("/stop-price")
+    public BizBaseResponse<Boolean> stopPrice(@Valid @RequestBody PriceListStopPriceRequest stopPriceRequests) {
+        Integer userId = 12345678;
+        return BizBaseResponse.success(priceListService.stopPrice(stopPriceRequests.getPriceListId(), userId));
     }
 
     @ApiOperation("报价单详情")
