@@ -22,7 +22,7 @@ public class MerchantRepository {
 
     public Merchant queryMerchantByUserId(String userId) {
         QueryWrapper<Merchant> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("user_id", userId)
+        queryWrapper.eq("id", userId)
                 .eq("deleted", 0);
         List<Merchant> merchants = merchantMapper.selectList(queryWrapper);
 

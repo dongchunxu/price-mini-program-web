@@ -4,13 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dianwoyin.price.BusinessException;
+import com.dianwoyin.price.constants.NameContants;
 import com.dianwoyin.price.constants.enums.ErrorCodeEnum;
 import com.dianwoyin.price.constants.enums.PriceListStatusEnum;
+import com.dianwoyin.price.dto.MerchantDTO;
 import com.dianwoyin.price.model.PriceListAsk;
 import com.dianwoyin.price.respository.CategoryPropertyRepository;
 import com.dianwoyin.price.respository.PriceListRepository;
 import com.dianwoyin.price.service.CategoryPropertyService;
 import com.dianwoyin.price.service.CategoryService;
+import com.dianwoyin.price.service.MerchantService;
 import com.dianwoyin.price.service.PriceListService;
 import com.dianwoyin.price.utils.DateUtils;
 import com.dianwoyin.price.vo.request.PriceListCreateRequest;
@@ -42,8 +45,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PriceListServiceImpl implements PriceListService {
     
-    private static final int MAX_ASK_COUNT_DAILY = 10;
-    
+
     @Autowired
     private CategoryPropertyService categoryPropertyService;
 
@@ -53,6 +55,9 @@ public class PriceListServiceImpl implements PriceListService {
     @Autowired
     private PriceListRepository priceListRepository;
 
+    @Autowired
+    private MerchantService merchantService;
+
     @Override
     public Boolean createPriceList(PriceListCreateRequest request, Integer userId) {
         log.info("createPriceList.request: {}, userId: {}", request, userId);
@@ -60,7 +65,7 @@ public class PriceListServiceImpl implements PriceListService {
 
         List<PriceListAsk> priceListAsks = priceListRepository.getPriceListAskByUserIdAndCreatedTime(userId,
                 DateUtils.getStartTimeOfDay(new Date(), 0), DateUtils.getEndTimeOfDay(new Date(), 0));
-        if (!CollectionUtils.isEmpty(priceListAsks) && priceListAsks.size() > MAX_ASK_COUNT_DAILY) {
+        if (!CollectionUtils.isEmpty(priceListAsks) && priceListAsks.size() > NameContants.MAX_ASK_COUNT_DAILY) {
             throw new BusinessException(ErrorCodeEnum.ERROR_SMS_CODE.getCode(), "今天您的询价过多~");
         }
 
@@ -142,19 +147,19 @@ public class PriceListServiceImpl implements PriceListService {
                Integer propId = prop.getId();
                Object value = prop.getValue();
                JSONArray jsonArray = JSON.parseArray(JSON.toJSONString(value));
-               for (int i = 0; i < jsonArray.size(); i++) {
+               for (Object item : jsonArray) {
                    List<CategoryPropListItem> categoryPropListItems = basicPropValueMap.get(propId);
                    if (!CollectionUtils.isEmpty(categoryPropListItems)) {
                        CategoryPropListItem categoryPropListItem = categoryPropListItems.get(0);
                        List<CategoryPropValueResponse> propValues = categoryPropListItem.getPropValues();
 
-                       Object o = jsonArray.get(i);
+                       Object o = item;
                        if (!CollectionUtils.isEmpty(propValues)) {
                            if (o instanceof Integer) {
                                if ("数量".equals(categoryPropListItem.getPropertyName())) {
                                    resultMap.put("数量", (String) o);
                                } else {
-                                   propValues.forEach(f->{
+                                   propValues.forEach(f -> {
                                        if (f.getId().equals(o)) {
                                            resultMap.put(categoryPropListItem.getPropertyName(), f.getPropertyValueName());
                                        }
@@ -173,16 +178,16 @@ public class PriceListServiceImpl implements PriceListService {
                 Integer propId = prop.getId();
                 Object value = prop.getValue();
                 JSONArray jsonArray = JSON.parseArray(JSON.toJSONString(value));
-                for (int i = 0; i < jsonArray.size(); i++) {
+                for (Object item : jsonArray) {
                     List<CategoryPropListItem> categoryPropListItems = otherPropValueMap.get(propId);
                     if (!CollectionUtils.isEmpty(categoryPropListItems)) {
                         CategoryPropListItem categoryPropListItem = categoryPropListItems.get(0);
                         List<CategoryPropValueResponse> propValues = categoryPropListItem.getPropValues();
 
-                        Object o = jsonArray.get(i);
+                        Object o = item;
                         if (!CollectionUtils.isEmpty(propValues)) {
                             if (o instanceof Integer) {
-                                propValues.forEach(f->{
+                                propValues.forEach(f -> {
                                     if (f.getId().equals(o)) {
                                         resultMap.put(categoryPropListItem.getPropertyName(), f.getPropertyValueName());
                                     }
@@ -206,6 +211,7 @@ public class PriceListServiceImpl implements PriceListService {
         if (priceListAsk == null) {
             throw new BusinessException(ErrorCodeEnum.ERROR_COMMON_PARAM.getCode(), "报价单不存在哦~");
         }
+
         // 属性
         Map<String, String> propValueMap = parsePropValue(priceListAsk.getCategoryId(), priceListAsk.getContent());
         List<SimplePropPair> props = new ArrayList<>();
@@ -213,14 +219,32 @@ public class PriceListServiceImpl implements PriceListService {
             props.add(new SimplePropPair(propName, propValueName));
         });
 
+
         GoodsDetail goodsDetail = new GoodsDetail();
         goodsDetail.setPropValues(props);
         goodsDetail.setComment("今天一定要送到哦！");
 
+        StringBuilder goodsName = new StringBuilder();
+        List<String> propValues = propValueMap.values().stream().collect(Collectors.toList());
+        for (String propValue : propValues) {
+            goodsName.append(propValue).append("/");
+        }
+
+        List<CategoryListResponse> allCategoryList = categoryService.getLeafCategoryList();
+        Map<Integer, List<CategoryListResponse>> categoryMap
+                = allCategoryList.stream().collect(Collectors.groupingBy(CategoryListResponse::getId));
+        List<CategoryListResponse> categoryListResponses = categoryMap.get(priceListAsk.getCategoryId());
+        CategoryListResponse categoryListResponse = categoryListResponses.get(0);
+        final String imgUrl = categoryListResponse.getImgUrl();
+
+
+        MerchantDTO merchant = merchantService.getMerchant(priceListAsk.getCreatedId() + "");
+        String addressDetail = merchant.getAddressDetail();
+        String address = merchant.getProvince() + merchant.getCity() + merchant.getDistrict();
         DeliveryDetail deliveryDetail = new DeliveryDetail();
         deliveryDetail.setDeliveryChannel(0);
-        deliveryDetail.setReceiverAddressDetail("3栋2单元");
-        deliveryDetail.setReceiverAddress("江苏省扬州市汉江中路101号");
+        deliveryDetail.setReceiverAddressDetail(addressDetail);
+        deliveryDetail.setReceiverAddress(address);
         deliveryDetail.setExpectDeliveryTime(new Date());
 
         OrderDetail orderDetail = new OrderDetail();
@@ -239,17 +263,17 @@ public class PriceListServiceImpl implements PriceListService {
         priceListReplyList.add(detail);
 
         return PriceListDetailResponse.builder()
-                .priceListId(123)
-                .priceListStatus(PriceListStatusEnum.Going.getCode())
-                .goodsName("标准不干胶100张")
-                .goodsImgUrl("")
+                .priceListId(priceListId)
+                .priceListStatus(priceListAsk.getStatus())
+                .goodsName(goodsName.toString())
+                .goodsImgUrl(imgUrl)
                 .goodsDetail(goodsDetail)
                 .deliveryDetail(deliveryDetail)
                 .payAmount(BigDecimal.valueOf(12313,2))
                 .goodsDetail(goodsDetail)
                 .orderDetail(orderDetail)
                 .priceListReplyList(priceListReplyList)
-                .createTime(new Date())
+                .createTime(Date.from(priceListAsk.getCreateTime().atZone(ZoneId.systemDefault()).toInstant()))
                 .build();
     }
 
