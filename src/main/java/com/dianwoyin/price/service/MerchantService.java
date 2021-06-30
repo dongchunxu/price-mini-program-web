@@ -29,4 +29,12 @@ public interface MerchantService {
      * 获取商户信息
      * */
     MerchantDTO getMerchant(String userId);
+
+    /**
+     * 根据账户id获取商户信息
+     * @param accountId
+     * @return
+     */
+    MerchantDTO getMerchantByAccountId(String accountId);
+
 }

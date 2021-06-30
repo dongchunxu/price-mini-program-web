@@ -1,7 +1,7 @@
 package com.dianwoyin.price.mapper;
 
-import com.dianwoyin.price.model.Order;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.dianwoyin.price.model.SuperOrder;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author dongchunxu
  * @since 2021-06-07
  */
-public interface OrderMapper extends BaseMapper<Order> {
+public interface SuperOrderMapper extends BaseMapper<SuperOrder> {
 
 }

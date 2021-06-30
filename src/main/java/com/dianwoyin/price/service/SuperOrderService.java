@@ -8,7 +8,7 @@ import com.dianwoyin.price.vo.response.order.OrderListItemResponse;
  * @author chunxu.dong
  * @date 2021/5/25
  */
-public interface OrderService {
+public interface SuperOrderService {
 
     /**
      * @param userId
@@ -23,7 +23,7 @@ public interface OrderService {
      * @param orderId
      * @return
      */
-    OrderDetailResponse getOrderDetail(Integer orderId);
+    OrderDetailResponse getOrderDetail(Integer orderId, Integer operator);
 
 
     /**
@@ -32,7 +32,7 @@ public interface OrderService {
      * @param operator
      * @return
      */
-    Boolean deleteOrder(Integer orderId, String operator);
+    Boolean deleteOrder(Integer orderId, Integer operator);
 
 
     /**
@@ -40,5 +40,5 @@ public interface OrderService {
      * @param orderId
      * @return
      */
-    Boolean confirmReceipt(Integer orderId);
+    Boolean confirmReceipt(Integer orderId, Integer operator);
 }

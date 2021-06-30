@@ -110,4 +110,6 @@ public class Merchant implements Serializable {
     private LocalDateTime updateTime;
 
 
+    private Long accountId;
+
 }

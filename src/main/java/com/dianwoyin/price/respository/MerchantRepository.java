@@ -42,4 +42,16 @@ public class MerchantRepository {
                 .eq("deleted", 0);
         merchantMapper.update(merchant, queryWrapper);
     }
+
+    public Merchant queryMerchantByAccountId(String accountId) {
+        QueryWrapper<Merchant> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("account_id", accountId)
+                .eq("deleted", 0);
+        List<Merchant> merchants = merchantMapper.selectList(queryWrapper);
+
+        if (CollectionUtils.isEmpty(merchants)) {
+            return null;
+        }
+        return merchants.get(0);
+    }
 }

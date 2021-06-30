@@ -15,6 +15,7 @@ import com.dianwoyin.price.model.Account;
 import com.dianwoyin.price.helper.AccountLoginHelper;
 import com.dianwoyin.price.utils.EncryptUtils;
 import com.dianwoyin.price.utils.HttpClientUtils;
+import com.dianwoyin.price.utils.JwtUtils;
 import com.dianwoyin.price.utils.PriceBeanUtils;
 import com.dianwoyin.price.vo.request.AccountUpdateRequest;
 import com.dianwoyin.price.vo.response.acount.AccountResponse;
@@ -27,7 +28,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.dianwoyin.price.constants.enums.ErrorCodeEnum.*;
@@ -40,32 +42,38 @@ import static com.dianwoyin.price.constants.enums.ErrorCodeEnum.*;
 @Slf4j
 public class AccountServiceImpl implements AccountService {
 
-    private static final String wx_url = "https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code";
-    private static final String WX_STATUS_OK = "0";
+    private static final String WX_URL = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
+    private static final String APP_ID = "wxabad98c4064cbd7b";
+    private static final String SECRET = "fff605584d763a93db3ee6343f0df8b8";
+
     @Autowired
     private RedisService redisService;
+
     @Autowired
     private QcloudFileService qcloudFileService;
+
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
 
     @Override
     public Boolean loginByWxUnion(String wxCode) {
         try {
-            WxLoginResponseDTO wxLoginResponseDTO = JSON.parseObject(HttpClientUtils.doGet(wx_url), WxLoginResponseDTO.class);
 
-            if (wxLoginResponseDTO == null || !Objects.equals(wxLoginResponseDTO.getErrCode(), WX_STATUS_OK)) {
+            WxLoginResponseDTO wxLoginResponseDTO = JSON.parseObject(HttpClientUtils.doGet(
+                    String.format(WX_URL, APP_ID, SECRET, wxCode)), WxLoginResponseDTO.class);
+
+            if (wxLoginResponseDTO == null || !Objects.equals(wxLoginResponseDTO.getErrCode(), 0)) {
                 throw new BusinessException(ErrorCodeEnum.UNION_LOGIN_WX_FAILED);
             }
-
             // 查询open id 是否已经存在
             Account account = accountRepository.queryAccountByOpenId(wxLoginResponseDTO.getOpenId());
             if (account == null) {
-                account = quickRegister(wxLoginResponseDTO.getOpenId());
+                quickRegisterByWxOpenId(wxLoginResponseDTO.getOpenId());
             }
-
-            AccountResponse accountRespBO = PriceBeanUtils.copyProperty(account, AccountResponse.class);
 
             return true;
         } catch (Exception e) {
@@ -73,13 +81,19 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    private Account quickRegister(String openId) {
-        return Account.builder()
+    private void quickRegisterByWxOpenId(String openId) {
+        Account account = Account.builder()
+                .openId(openId)
+                .lastLoginTime(LocalDateTime.now())
+                .deleted(false)
+                .createTime(LocalDateTime.now())
+                .updateTime(LocalDateTime.now())
                 .build();
+        accountRepository.addAccount(account);
     }
 
     @Override
-    public Boolean loginByPhone(String phone, String smsCode) {
+    public String loginByPhone(String phone, String smsCode) {
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(smsCode)) {
             throw new BusinessException(ERROR_COMMON_PARAM);
         }
@@ -93,9 +107,12 @@ public class AccountServiceImpl implements AccountService {
         if (account == null) {
             throw new BusinessException(USER_NOT_EXIST);
         }
-        // 快速登录
-        quickLogin(account);
-        return true;
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("userName", account.getUsername());
+        body.put("firstName", account.getFirstName());
+        body.put("lastName", account.getLastName());
+        return jwtUtils.createJwt(account.getId()+"", account.getPhone(), body);
     }
 
     @Override
@@ -183,6 +200,18 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public String uploadAvatar(MultipartFile file) {
         try {
+            String fileName = file.getOriginalFilename();
+            if (StringUtils.isEmpty(fileName)) {
+                throw new BusinessException(ERROR_COMMON_PARAM);
+            }
+
+            int i = fileName.lastIndexOf(".");
+            String extension = fileName.substring(i+1);
+            if (!extension.equals("png") && !extension.equals("jpg")
+                    && !extension.equals("jpeg")) {
+                throw new BusinessException(ERROR_COMMON_PARAM.getCode(), "请上传正确的图片格式(jpeg, jpg, png)");
+            }
+
             return qcloudFileService.uploadImg(file);
         } catch (IOException e) {
             log.error("uploadAvatar error", e);

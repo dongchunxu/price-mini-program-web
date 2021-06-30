@@ -207,7 +207,6 @@ public class PriceListServiceImpl implements PriceListService {
     @Override
     public PriceListDetailResponse getPriceListDetail(Integer priceListId) {
         PriceListAsk priceListAsk = priceListRepository.getPriceListAsk(priceListId);
-
         if (priceListAsk == null) {
             throw new BusinessException(ErrorCodeEnum.ERROR_COMMON_PARAM.getCode(), "报价单不存在哦~");
         }
@@ -218,8 +217,7 @@ public class PriceListServiceImpl implements PriceListService {
         propValueMap.forEach((propName, propValueName)->{
             props.add(new SimplePropPair(propName, propValueName));
         });
-
-
+        
         GoodsDetail goodsDetail = new GoodsDetail();
         goodsDetail.setPropValues(props);
         goodsDetail.setComment("今天一定要送到哦！");

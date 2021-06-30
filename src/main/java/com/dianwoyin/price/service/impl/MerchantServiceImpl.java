@@ -89,4 +89,10 @@ public class MerchantServiceImpl implements MerchantService {
         return PriceBeanUtils.copyProperty(merchant, MerchantDTO.class);
     }
 
+    @Override
+    public MerchantDTO getMerchantByAccountId(String accountId) {
+        Merchant merchant = merchantRepository.queryMerchantByAccountId(accountId);
+        return PriceBeanUtils.copyProperty(merchant, MerchantDTO.class);
+    }
+
 }

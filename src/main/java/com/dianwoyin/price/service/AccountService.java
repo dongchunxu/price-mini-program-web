@@ -12,7 +12,7 @@ public interface AccountService {
 
     Boolean loginByWxUnion(String wxCode);
 
-    Boolean loginByPhone(String phone, String smsCode);
+    String loginByPhone(String phone, String smsCode);
 
     Boolean loginByPassword(String username, String password);
 

@@ -1,12 +1,16 @@
 package com.dianwoyin.price.service.impl;
 
 import com.dianwoyin.price.constants.enums.OrderStatusEnum;
-import com.dianwoyin.price.service.OrderService;
+import com.dianwoyin.price.model.SuperOrder;
+import com.dianwoyin.price.respository.SuperOrderRepository;
+import com.dianwoyin.price.service.SuperOrderService;
 import com.dianwoyin.price.vo.response.PageResult;
+import com.dianwoyin.price.vo.response.order.DeliveryDetail;
 import com.dianwoyin.price.vo.response.order.OrderDetailResponse;
 import com.dianwoyin.price.vo.response.order.OrderListItemResponse;
-import com.dianwoyin.price.vo.response.order.DeliveryDetail;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,11 +24,17 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class OrderServiceImpl implements OrderService {
+public class SuperOrderServiceImpl implements SuperOrderService {
+
+
+    @Autowired
+    private SuperOrderRepository superOrderRepository;
 
     @Override
     public PageResult<OrderListItemResponse> getOrderList(Integer userId, Integer orderStatus,
                                                           Integer page, Integer pageSize) {
+
+        PageResult<SuperOrder> pageResult = superOrderRepository.getOrderList(userId, orderStatus, page, pageSize);
         List<OrderListItemResponse> dataList = new ArrayList<>();
         dataList.add(mock("测试数据123123123123123qweqweq1，测试1", 1001, orderStatus));
         dataList.add(mock("测试数据123123123123123qweqwe1，测试1",1002, orderStatus));
@@ -35,44 +45,27 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDetailResponse getOrderDetail(Integer orderId) {
-        OrderDetailResponse response = new OrderDetailResponse();
-        response.setOrderId(orderId);
-        response.setDeliveryTime(new Date());
-        response.setGoodsName("普通不干胶100张【中秋节活动】");
-        response.setGoodsImgUrl("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01f8bc5ac9ac8ca801212573f14f60.jpg%402o.jpg&refer=http%3A%2F%2Fimg.zcool.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624777396&t=7686cd9fd91997e7baf8dc60b503bb16");
-        response.setOrderStatus(OrderStatusEnum.Finished.getCode());
-        response.setFreightPrice(BigDecimal.ZERO);
-        response.setOrderNo("1912-2313-3434");
-        response.setGoodsPrice(BigDecimal.valueOf(212,2));
-        response.setGoodsQty(12);
-        response.setPayAmount(BigDecimal.valueOf(1222,2));
-        response.setPayChannel(0);
-        response.setPayTime(new Date());
+    public OrderDetailResponse getOrderDetail(Integer orderId, Integer operator) {
 
-        DeliveryDetail deliveryDetail = new DeliveryDetail();
-        deliveryDetail.setDeliveryNo("SH123123132");
-        deliveryDetail.setDeliveryPerson("张三");
-        deliveryDetail.setReceiverName("董");
-        deliveryDetail.setReceiverPhone("17602123195");
-        deliveryDetail.setReceiverAddressDetail("上海市闵行区高兴路666弄8号");
-        deliveryDetail.setDeliveryPhone("13952589089");
-        deliveryDetail.setDeliveryChannelName("物流公司");
-        deliveryDetail.setReceiverAddress("江苏省扬州市");
-        response.setDeliveryDetail(deliveryDetail);
-        return response;
+        SuperOrder superOrder = superOrderRepository.getOrderById(orderId, operator);
+        OrderDetailResponse target = new OrderDetailResponse();
+
+        return transferOrderDetailResponse(superOrder);
+    }
+
+    private OrderDetailResponse transferOrderDetailResponse(SuperOrder superOrder) {
+        return null;
     }
 
     @Override
-    public Boolean deleteOrder(Integer orderId, String operator) {
-        return true;
+    public Boolean deleteOrder(Integer orderId, Integer operator) {
+        return superOrderRepository.deleteOrder(orderId, operator);
     }
 
     @Override
-    public Boolean confirmReceipt(Integer orderId) {
-        return true;
+    public Boolean confirmReceipt(Integer orderId, Integer operator) {
+       return superOrderRepository.confirmReceipt(orderId, operator);
     }
-
 
     private OrderListItemResponse mock(String goodsName, Integer orderId, Integer orderStatus) {
         OrderListItemResponse response = new OrderListItemResponse();

@@ -1,0 +1,4 @@
+jwt:
+  config:
+    key: userLogin
+    failureTime: 3600000

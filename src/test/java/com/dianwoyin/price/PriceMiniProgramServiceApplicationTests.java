@@ -29,7 +29,7 @@
 //        // 全局配置
 //        GlobalConfig gc = new GlobalConfig();
 //        gc.setOutputDir(rb.getString("OutputDir"));
-//        gc.setOpen(false);PriceListServiceImpl.java
+//        gc.setOpen(false);
 //        gc.setBaseResultMap(true);
 //        gc.setBaseColumnList(true);
 //        gc.setAuthor(rb.getString("author"));
@@ -55,8 +55,8 @@
 //        pc.setController("controller");
 //        pc.setService("service");
 //        pc.setServiceImpl("service.impl");
-//        pc.setEntity("com/dianwoyin/price/model");
-//        pc.setMapper("com/dianwoyin/price/mapper");
+////        pc.setEntity("com.dianwoyin.price.model");
+////        pc.setMapper("com.dianwoyin.price.mapper");
 //        mpg.setPackageInfo(pc);
 //
 //        // 自定义配置
@@ -83,8 +83,7 @@
 //        strategy.setNaming(NamingStrategy.underline_to_camel);
 //        strategy.setColumnNaming(NamingStrategy.underline_to_camel);
 //        strategy.setEntityLombokModel(true);
-//        strategy.setInclude("account", "activity", "category_dict", "category_property","category_property_value",
-//                "district_dict", "merchant", "merchant_tag", "order", "price_list_ask", "price_list_reply", "tag_dict");
+//        strategy.setInclude("super_order");
 //        strategy.setTablePrefix("sys_");
 //        mpg.setStrategy(strategy);
 //        mpg.setTemplateEngine(new FreemarkerTemplateEngine());

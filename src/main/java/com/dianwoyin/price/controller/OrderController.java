@@ -1,6 +1,6 @@
 package com.dianwoyin.price.controller;
 
-import com.dianwoyin.price.service.OrderService;
+import com.dianwoyin.price.service.SuperOrderService;
 import com.dianwoyin.price.vo.BizBaseResponse;
 import com.dianwoyin.price.vo.BizPageResponse;
 import com.dianwoyin.price.vo.request.OrderCreateRequest;
@@ -24,19 +24,21 @@ import javax.validation.Valid;
 public class OrderController {
 
     @Autowired
-    private OrderService orderService;
+    private SuperOrderService superOrderService;
 
 
     @ApiOperation("确认收货")
     @PostMapping("/confirm-receipt/{orderId}")
     public BizBaseResponse<Boolean> confirmReceipt(@ApiParam("订单id") @PathVariable Integer orderId) {
-        return BizBaseResponse.success(orderService.confirmReceipt(orderId));
+        Integer userId = 12345678;
+        return BizBaseResponse.success(superOrderService.confirmReceipt(orderId, userId));
     }
 
     @ApiOperation("删除订单")
     @PostMapping("/delete/{orderId}")
     public BizBaseResponse<Boolean> delete(@ApiParam("订单id") @PathVariable Integer orderId) {
-        return BizBaseResponse.success(orderService.deleteOrder(orderId, null));
+        Integer userId = 12345678;
+        return BizBaseResponse.success(superOrderService.deleteOrder(orderId, userId));
     }
 
     @ApiOperation("获取订单列表")
@@ -45,14 +47,14 @@ public class OrderController {
             @ApiParam("订单状态, 1待支付/2待发货/3待收货/4已完成/5待退款") @RequestParam(required = false) Integer orderStatus,
                     @RequestParam("page") Integer page, @RequestParam("pageSize") Integer pageSize) {
         Integer userId = null;
-        return BizPageResponse.success(orderService.getOrderList(userId, orderStatus, page, pageSize));
+        return BizPageResponse.success(superOrderService.getOrderList(userId, orderStatus, page, pageSize));
     }
 
 
     @ApiOperation("获取订单详情")
     @GetMapping("/get-order-detail/{orderId}")
     public BizBaseResponse<OrderDetailResponse> orderDetail(@ApiParam("订单id") @PathVariable Integer orderId) {
-        return BizBaseResponse.success(orderService.getOrderDetail(orderId));
+        return BizBaseResponse.success(superOrderService.getOrderDetail(orderId, 12345678));
     }
 
     @ApiOperation("创建订单")
