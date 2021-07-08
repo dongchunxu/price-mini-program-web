@@ -28,6 +28,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/merchant")
 @Api(tags = "商户")
 @Slf4j
+@CrossOrigin(origins = "*")
 public class MerchantController {
 
     @Autowired

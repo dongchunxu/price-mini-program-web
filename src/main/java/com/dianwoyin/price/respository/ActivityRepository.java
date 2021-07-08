@@ -1,5 +1,6 @@
 package com.dianwoyin.price.respository;
 
+import com.dianwoyin.price.model.Activity;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -8,4 +9,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class ActivityRepository {
+
+    public Activity queryActivityById(Integer referId) {
+        return null;
+    }
 }

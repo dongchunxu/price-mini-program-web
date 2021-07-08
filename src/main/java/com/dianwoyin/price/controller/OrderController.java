@@ -60,6 +60,7 @@ public class OrderController {
     @ApiOperation("创建订单")
     @PostMapping("/create")
     public BizBaseResponse<Boolean> create(@RequestBody @Valid OrderCreateRequest request) {
-        return BizBaseResponse.success(true);
+        Integer userId = null;
+        return BizBaseResponse.success(superOrderService.createOrder(request, userId));
     }
 }

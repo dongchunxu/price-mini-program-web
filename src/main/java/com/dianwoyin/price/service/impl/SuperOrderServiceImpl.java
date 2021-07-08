@@ -1,22 +1,26 @@
 package com.dianwoyin.price.service.impl;
 
+import com.dianwoyin.price.BusinessException;
+import com.dianwoyin.price.constants.enums.ErrorCodeEnum;
 import com.dianwoyin.price.constants.enums.OrderStatusEnum;
-import com.dianwoyin.price.model.SuperOrder;
-import com.dianwoyin.price.respository.SuperOrderRepository;
+import com.dianwoyin.price.model.*;
+import com.dianwoyin.price.respository.*;
 import com.dianwoyin.price.service.SuperOrderService;
+import com.dianwoyin.price.vo.request.OrderCreateRequest;
 import com.dianwoyin.price.vo.response.PageResult;
-import com.dianwoyin.price.vo.response.order.DeliveryDetail;
 import com.dianwoyin.price.vo.response.order.OrderDetailResponse;
 import com.dianwoyin.price.vo.response.order.OrderListItemResponse;
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author chunxu.dong
@@ -30,26 +34,45 @@ public class SuperOrderServiceImpl implements SuperOrderService {
     @Autowired
     private SuperOrderRepository superOrderRepository;
 
+    @Autowired
+    private PriceListRepository priceListRepository;
+
+    @Autowired
+    private ActivityRepository activityRepository;
+
+    @Autowired
+    private MerchantRepository merchantRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Override
     public PageResult<OrderListItemResponse> getOrderList(Integer userId, Integer orderStatus,
                                                           Integer page, Integer pageSize) {
 
         PageResult<SuperOrder> pageResult = superOrderRepository.getOrderList(userId, orderStatus, page, pageSize);
-        List<OrderListItemResponse> dataList = new ArrayList<>();
-        dataList.add(mock("测试数据123123123123123qweqweq1，测试1", 1001, orderStatus));
-        dataList.add(mock("测试数据123123123123123qweqwe1，测试1",1002, orderStatus));
-        dataList.add(mock("测试数据1231231231231231qweqe，测试1",1003, orderStatus));
-        dataList.add(mock("测试数据123123123123123qweqe1，测试1",1004, orderStatus));
-        dataList.add(mock("测试数据123123123123123qweqwe1，测试1",1005, orderStatus));
-        return PageResult.of(dataList, page, pageSize, dataList.size());
+
+        if (CollectionUtils.isEmpty(pageResult.getResults())) {
+            return PageResult.of(Collections.emptyList(), page, pageSize, pageResult.getTotal());
+        }
+
+        return PageResult.of(transferOrderListItemResponse(pageResult), page, pageSize, pageResult.getTotal());
+    }
+
+    private List<OrderListItemResponse> transferOrderListItemResponse(PageResult<SuperOrder> pageResult) {
+        List<SuperOrder> superOrders = pageResult.getResults();
+
+        List<OrderListItemResponse> itemResponses = superOrders.stream().map(e -> {
+            OrderListItemResponse itemResponse = new OrderListItemResponse();
+            BeanUtils.copyProperties(e, itemResponse);
+            return itemResponse;
+        }).collect(Collectors.toList());
+        return itemResponses;
     }
 
     @Override
     public OrderDetailResponse getOrderDetail(Integer orderId, Integer operator) {
-
         SuperOrder superOrder = superOrderRepository.getOrderById(orderId, operator);
-        OrderDetailResponse target = new OrderDetailResponse();
-
         return transferOrderDetailResponse(superOrder);
     }
 
@@ -64,19 +87,71 @@ public class SuperOrderServiceImpl implements SuperOrderService {
 
     @Override
     public Boolean confirmReceipt(Integer orderId, Integer operator) {
-       return superOrderRepository.confirmReceipt(orderId, operator);
+        return superOrderRepository.confirmReceipt(orderId, operator);
     }
 
-    private OrderListItemResponse mock(String goodsName, Integer orderId, Integer orderStatus) {
-        OrderListItemResponse response = new OrderListItemResponse();
-        response.setOrderId(orderId);
-        response.setGoodsImgUrl("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01f8bc5ac9ac8ca801212573f14f60.jpg%402o.jpg&refer=http%3A%2F%2Fimg.zcool.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624777396&t=7686cd9fd91997e7baf8dc60b503bb16");
-        response.setGoodsName(goodsName);
-        response.setSupplierName("郑州彩印有限公司");
-        response.setSupplierPhone("13952589089");
-        response.setPayAmount(BigDecimal.valueOf(12,2));
-        response.setCreateTime(new Date());
-        response.setOrderStatus(orderStatus);
-        return response;
+    @Override
+    public Boolean createOrder(OrderCreateRequest request, Integer operator) {
+        Integer referId = request.getReferId();
+
+        String goodsName;
+        String goodsImgUrl;
+
+        // 活动
+        if (request.getChannel() == 1) {
+            Activity activity = activityRepository.queryActivityById(referId);
+            if (activity == null) {
+                throw new BusinessException(ErrorCodeEnum.ERROR_COMMON_PARAM.getCode(), "当前活动已失效~");
+            }
+
+            goodsName = activity.getActivityName();
+
+            String imgUrls = activity.getImgUrls();
+            if (StringUtils.isNotBlank(imgUrls)) {
+                goodsImgUrl = imgUrls.split(",")[0];
+            } else {
+                // todo 默认图
+                goodsImgUrl = "";
+            }
+        }
+        // 报价单
+        else {
+            PriceListAsk priceListAsk = priceListRepository.getPriceListAsk(referId);
+            if (priceListAsk == null) {
+                throw new BusinessException(ErrorCodeEnum.ERROR_COMMON_PARAM.getCode(), "当前报价单不存在~");
+            }
+
+            goodsName = priceListAsk.getName();
+
+            CategoryDict categoryDict = categoryRepository.queryCategroyById(priceListAsk.getCategoryId());
+            if (categoryDict == null) {
+                throw new BusinessException(ErrorCodeEnum.ERROR_COMMON_PARAM.getCode(), "当前类目不存在~");
+            }
+            goodsImgUrl = categoryDict.getImgUrl();
+        }
+
+        Merchant merchant = merchantRepository.queryMerchantByUserId(operator + "");
+        String addressDetail = merchant.getAddressDetail();
+        String province = merchant.getProvince();
+        String city = merchant.getCity();
+        String district = merchant.getDistrict();
+        String receiverPhone = merchant.getReceiverPhone();
+        String receiverName = merchant.getReceiverName();
+
+        SuperOrder superOrder = new SuperOrder();
+        superOrder.setOrderNo(NumUtils.randomNum("DW", 8));
+        superOrder.setReceiverPhone(receiverPhone);
+        superOrder.setReceiverName(receiverName);
+        superOrder.setReceiverAddress(province + city + district);
+        superOrder.setReceiverAddressDetail(addressDetail);
+        superOrder.setGoodsName(goodsName);
+        superOrder.setGoodsImgUrl(goodsImgUrl);
+        superOrder.setDeleted(false);
+        superOrder.setCreatedId(operator);
+        superOrder.setStatus(OrderStatusEnum.WaitPay.getCode());
+        superOrder.setCreateTime(LocalDateTime.now());
+        superOrder.setUpdateTime(LocalDateTime.now());
+        superOrderRepository.createOrder(superOrder);
+        return true;
     }
 }

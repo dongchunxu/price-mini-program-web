@@ -20,4 +20,8 @@ public class CategoryRepository {
     public List<CategoryDict> queryAllCategory() {
         return categoryDictMapper.selectList(new QueryWrapper<CategoryDict>().ge("id", 0));
     }
+
+    public CategoryDict queryCategroyById(Integer categoryId) {
+        return categoryDictMapper.selectOne(new QueryWrapper<CategoryDict>().eq("id", categoryId));
+    }
 }

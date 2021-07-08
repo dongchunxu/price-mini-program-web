@@ -1,5 +1,6 @@
 package com.dianwoyin.price.service;
 
+import com.dianwoyin.price.vo.request.OrderCreateRequest;
 import com.dianwoyin.price.vo.response.PageResult;
 import com.dianwoyin.price.vo.response.order.OrderDetailResponse;
 import com.dianwoyin.price.vo.response.order.OrderListItemResponse;
@@ -41,4 +42,11 @@ public interface SuperOrderService {
      * @return
      */
     Boolean confirmReceipt(Integer orderId, Integer operator);
+
+    /**
+     * 创建订单
+     * @param request
+     * @return
+     */
+    Boolean createOrder(OrderCreateRequest request, Integer operator);
 }

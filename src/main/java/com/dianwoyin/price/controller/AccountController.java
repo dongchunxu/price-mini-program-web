@@ -35,6 +35,7 @@ import javax.validation.constraints.NotNull;
 @RestController
 @Api(tags = "账户服务")
 @Slf4j
+@CrossOrigin(origins = "*")
 public class AccountController {
 
     @Autowired

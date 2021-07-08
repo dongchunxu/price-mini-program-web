@@ -9,6 +9,7 @@ import com.dianwoyin.price.model.SuperOrder;
 import com.dianwoyin.price.vo.response.PageResult;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -88,5 +89,10 @@ public class SuperOrderRepository {
         List<SuperOrder> superOrders = superOrderMapper.selectList(queryWrapper);
 
         return PageResult.of(superOrders, page, pageSize, pageTotal.getTotal());
+    }
+
+    public Boolean createOrder(SuperOrder superOrder) {
+        superOrderMapper.insert(superOrder);
+        return true;
     }
 }
